@@ -1,4 +1,4 @@
-package prueba;
+package gui;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -8,8 +8,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+
+import modelo.Cancion;
+import repositorio.CancionRepositorio;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.sql.Blob;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
@@ -18,9 +26,11 @@ import java.awt.EventQueue;
 public class SubirCancion extends JFrame{
 	
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField textTitulo;
+	private JTextField textGenero;
+	private JTextField textArchivo;
+	
+	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -84,24 +94,31 @@ public class SubirCancion extends JFrame{
 		txtCorreo.setOpaque(false);
 		panel.add(txtCorreo);
 		
-		textField = new JTextField();
-		textField.setBounds(77, 19, 454, 20);
-		panel.add(textField);
-		textField.setColumns(10);
+		textTitulo = new JTextField();
+		textTitulo.setBounds(77, 19, 454, 20);
+		panel.add(textTitulo);
+		textTitulo.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(77, 49, 454, 20);
-		panel.add(textField_1);
+		textGenero = new JTextField();
+		textGenero.setColumns(10);
+		textGenero.setBounds(77, 49, 454, 20);
+		panel.add(textGenero);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(77, 81, 332, 20);
-		panel.add(textField_2);
+		textArchivo = new JTextField();
+		textArchivo.setColumns(10);
+		textArchivo.setBounds(77, 81, 332, 20);
+		panel.add(textArchivo);
 		
 		JButton btnTerminar = new JButton("Subir");
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					File file = new File("data/blob");
+					FileInputStream fileInput = new FileInputStream(file);
+					Cancion cancion = new Cancion(1, textTitulo.getText(), "artista",
+							textGenero.getText(), 0 , 0.0, fileInput);
+					cancionRepositorio.subirCancion(cancion);
+				} catch (FileNotFoundException e1) { }
 			}
 		});
 		btnTerminar.setBounds(356, 122, 122, 23);

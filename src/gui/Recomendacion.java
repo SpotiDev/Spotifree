@@ -1,4 +1,4 @@
-package prueba;
+package gui;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.EventQueue;
 
-public class Recomendacion extends JFrame{
+public class Recomendacion extends JFrame {
 	
 	private JPanel contentPane;
 	private JTextField textField;
