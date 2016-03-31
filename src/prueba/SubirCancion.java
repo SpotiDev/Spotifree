@@ -6,12 +6,14 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.awt.EventQueue;
 
 public class SubirCancion extends JFrame{
 	
@@ -19,6 +21,21 @@ public class SubirCancion extends JFrame{
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					// select Look and Feel
+		            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+		            SubirCancion frame = new SubirCancion();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	
 	public SubirCancion() {
 		

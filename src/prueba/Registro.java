@@ -7,6 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
+
+import bd.ConexionBD;
+import bd.JDBCTemplate;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -100,6 +104,11 @@ public class Registro extends JFrame{
 		JButton btnTerminar = new JButton("Registrarse");
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JDBCTemplate p = ConexionBD.conectar();
+				p.executeSentence("INSERT INTO Usuario (NombreUsuario,NombrePublico,Correo,Contrasena,Telefono) VALUES "
+						+ "(?,?,?,?,?)",textField.getText(),textField_1.getText(),textField_2.getText(),
+						textField_3.getText(),textField_4.getText());
+				ConexionBD.desconectar(p);
 			}
 		});
 		btnTerminar.setBounds(195, 175, 122, 23);

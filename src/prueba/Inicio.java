@@ -29,6 +29,9 @@ import javax.swing.border.LineBorder;
 
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
 
+import bd.ConexionBD;
+import bd.JDBCTemplate;
+
 /**
  * Pantalla que gestiona el acceso a la aplicacion de los distintos tipos de
  * usuario que hay en la aplicacion: cliente y administrador
@@ -108,6 +111,9 @@ public class Inicio extends JFrame {
 		btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				JDBCTemplate p = ConexionBD.conectar();
+				p.executeQuery("SELECT * FROM Cancion WHERE Cancion.Nombre = '"+textBusqueda.getText()+"'");
+				ConexionBD.desconectar(p);
 			}
 		});
 		btnBuscar.setBounds(435, 14, 103, 23);
@@ -135,6 +141,14 @@ public class Inicio extends JFrame {
 		btnIniciarSesin.setBackground(SystemColor.desktop);
 		btnIniciarSesin.setBounds(266, 277, 104, 47);
 		panel.add(btnIniciarSesin);
+		btnIniciarSesin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JDBCTemplate p = ConexionBD.conectar();
+				p.executeQuery("SELECT * FROM Usuario WHERE Usuario.NombreUsuario = '"+textField.getText()+"'"
+						+ " AND Usuario.Contrasena = '"+textField_1.getText()+"'");
+				ConexionBD.desconectar(p);
+			}
+		});
 		
 		
 		table = new JTable(new DefaultTableModel(
