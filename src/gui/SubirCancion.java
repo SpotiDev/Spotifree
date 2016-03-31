@@ -12,11 +12,16 @@ import javax.swing.border.EmptyBorder;
 import modelo.Cancion;
 import repositorio.CancionRepositorio;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Blob;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -113,10 +118,10 @@ public class SubirCancion extends JFrame{
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					File file = new File("data/blob");
+					File file = new File("data/blob.mp3");
 					FileInputStream fileInput = new FileInputStream(file);
 					Cancion cancion = new Cancion(1, textTitulo.getText(), "artista",
-							textGenero.getText(), 0 , 0.0, fileInput);
+							textGenero.getText(), 0 , 0, fileInput);
 					cancionRepositorio.subirCancion(cancion);
 				} catch (FileNotFoundException e1) { }
 			}
@@ -131,8 +136,6 @@ public class SubirCancion extends JFrame{
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(141, 122, 122, 23);
 		panel.add(btnCancelar);
-		
-		
 		
 	}
 }
