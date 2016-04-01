@@ -8,16 +8,29 @@ import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+
+import javazoom.jl.decoder.JavaLayerException;
+import modelo.Cancion;
+import modelo.PausablePlayer;
+import repositorio.CancionRepositorio;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.EventQueue;
 
 public class Reproductor extends JFrame{
 	
 	private JPanel contentPane;
+	
+	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
+	
+	private PausablePlayer player;
+	
+	private boolean status = false;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -35,6 +48,16 @@ public class Reproductor extends JFrame{
 	}
 	
 	public Reproductor() {
+		
+		try {
+            File file = new File("data/blob.mp3");
+        	FileInputStream fileInput = new FileInputStream(file);
+        	Cancion cancion = new Cancion(1, "", "", "", 0, 0, fileInput);
+    		//Cancion cancion = cancionRepositorio.seleccionarCancion(1);
+            player = new PausablePlayer(cancion.getArchivo());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		setTitle("Reproductor - Spotifree");
 		
@@ -65,6 +88,12 @@ public class Reproductor extends JFrame{
 		JButton btnPlay = new JButton("Play");
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					if (player.isNotStarted() || player.isPaused()) {
+						player.play();
+					}
+				} catch (JavaLayerException e1) {
+				}
 			}
 		});
 		btnPlay.setBounds(201, 135, 122, 23);
@@ -73,6 +102,9 @@ public class Reproductor extends JFrame{
 		JButton button = new JButton("Stop");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (player.isPlaying()) {
+					player.pause();
+				}
 			}
 		});
 		button.setBounds(39, 135, 122, 23);

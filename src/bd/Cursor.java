@@ -1,4 +1,8 @@
 package bd;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -73,5 +77,19 @@ public class Cursor implements Iterable<Cursor> {
 		} catch (SQLException e) {
 			return null;
 		}
+	}
+	
+	public FileInputStream getFileInputStream(String name) {
+		FileInputStream fileInputStream = null;
+		try {
+			Blob blob = rs.getBlob(name);
+			byte[] blobVal = new byte[(int) blob.length()];
+	        InputStream blobIs = blob.getBinaryStream();
+			blobIs.read(blobVal);
+			fileInputStream = (FileInputStream) blobIs;
+		} catch (SQLException e) {
+		} catch (IOException e) {
+		}
+		return fileInputStream;
 	}
 }

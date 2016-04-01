@@ -9,20 +9,22 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.TagException;
+
 import modelo.Cancion;
 import repositorio.CancionRepositorio;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Blob;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
@@ -120,10 +122,19 @@ public class SubirCancion extends JFrame{
 				try {
 					File file = new File("data/blob.mp3");
 					FileInputStream fileInput = new FileInputStream(file);
+					AudioFile audioFile = AudioFileIO.read(file);
+					int duration = audioFile.getAudioHeader().getTrackLength();
+					System.out.println(duration);
 					Cancion cancion = new Cancion(1, textTitulo.getText(), "artista",
-							textGenero.getText(), 0 , 0, fileInput);
+							textGenero.getText(), 0 , duration, fileInput);
 					cancionRepositorio.subirCancion(cancion);
-				} catch (FileNotFoundException e1) { }
+				} catch (FileNotFoundException e1) {
+				} catch (CannotReadException e1) {
+				} catch (TagException e1) {
+				} catch (ReadOnlyFileException e1) {
+				} catch (InvalidAudioFrameException e1) {
+				} catch (IOException e1) {
+				}
 			}
 		});
 		btnTerminar.setBounds(356, 122, 122, 23);
