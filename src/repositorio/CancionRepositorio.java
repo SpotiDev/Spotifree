@@ -23,16 +23,23 @@ public class CancionRepositorio {
 	}
 	
 	public Cancion seleccionarCancion(int id) {
-		String sql = "SELECT * FROM Cancion WHERE id=" + id + ")";
+		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion, Archivo FROM Cancion WHERE ID = " + id;
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
 		Cancion cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
 				cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
 				cursor.getFileInputStream("archivo"));
+		System.out.println(cancion.toString());
 		return cancion;
 	}
 	
+//	public int findMaxId() {
+//		String sql = "SELECT MAX(ID) AS Maxid FROM Cancion";
+//		Cursor cursor = p.executeQueryAndGetCursor(sql);
+//		return cursor.getInteger("Maxid");
+//	}
+	
 	public ArrayList<Cancion> findCanciones (String busqueda){
-		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion WHERE Cancion.Nombre = '"+busqueda+"'" + "OR Cancion.Artista = '"+busqueda+"'" + "OR Cancion.Genero = '"+busqueda+"'";
+		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion WHERE Cancion.Nombre LIKE '%"+busqueda+"%'" + "OR Cancion.Artista LIKE '%"+busqueda+"%'" + "OR Cancion.Genero LIKE '%"+busqueda+"%'";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
 		ArrayList<Cancion> listaCanciones = new ArrayList<>();
 		int i = 1; //Max 10 canciones
@@ -40,8 +47,9 @@ public class CancionRepositorio {
 			Cancion cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
 					cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
 					null);
+			cursor.iterator().next();
 			listaCanciones.add(cancion);
-			System.out.println(cancion.getId()+cancion.getNombre());
+			System.out.println(cancion.toString());
 			i++;
 		}
 		System.out.println("Acabo de listar");
@@ -57,8 +65,9 @@ public class CancionRepositorio {
 			Cancion cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
 					cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
 					null);
+			cursor.iterator().next();
 			listaCanciones.add(cancion);
-			System.out.println(cancion.getId()+cancion.getNombre());
+			System.out.println(cancion.toString());
 			i++;
 		}
 		System.out.println("Acabo de listar");

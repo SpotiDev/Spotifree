@@ -3,11 +3,14 @@ package gui;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -20,13 +23,16 @@ import modelo.Cancion;
 import repositorio.CancionRepositorio;
 
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JTextField;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 
@@ -36,6 +42,9 @@ public class SubirCancion extends JFrame{
 	private JTextField textTitulo;
 	private JTextField textGenero;
 	private JTextField textArchivo;
+	
+	//Archvio para guardar el Fichero seleccionado
+	File file;
 	
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 	
@@ -116,18 +125,25 @@ public class SubirCancion extends JFrame{
 		textArchivo.setBounds(77, 81, 332, 20);
 		panel.add(textArchivo);
 		
+		//Selector de fichero de mp3
+		final JFileChooser fc = new JFileChooser();
+		FileFilter filter = new FileNameExtensionFilter("MP3 File","mp3");
+		fc.setFileFilter(filter);
+		fc.setAcceptAllFileFilterUsed(false);
+		
 		JButton btnTerminar = new JButton("Subir");
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					File file = new File("data/blob.mp3");
-					FileInputStream fileInput = new FileInputStream(file);
-					AudioFile audioFile = AudioFileIO.read(file);
-					int duration = audioFile.getAudioHeader().getTrackLength();
-					System.out.println(duration);
-					Cancion cancion = new Cancion(1, textTitulo.getText(), "artista",
-							textGenero.getText(), 0 , duration, fileInput);
-					cancionRepositorio.subirCancion(cancion);
+					if (file != null){
+						FileInputStream fileInput = new FileInputStream(file);
+						AudioFile audioFile = AudioFileIO.read(file);
+						int duration = audioFile.getAudioHeader().getTrackLength();
+						//System.out.println(duration);
+						Cancion cancion = new Cancion(1, textTitulo.getText(), "artista",
+								textGenero.getText(), 0 , duration, fileInput);
+						cancionRepositorio.subirCancion(cancion);
+					}
 				} catch (FileNotFoundException e1) {
 				} catch (CannotReadException e1) {
 				} catch (TagException e1) {
@@ -143,10 +159,28 @@ public class SubirCancion extends JFrame{
 		JButton btnSeleccionar = new JButton("Seleccionar");
 		btnSeleccionar.setBounds(409, 78, 122, 23);
 		panel.add(btnSeleccionar);
+		btnSeleccionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int returnVal = fc.showOpenDialog(SubirCancion.this);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+		            file = fc.getSelectedFile();
+		            textArchivo.setText(file.getName());
+		        } else {
+		        	 textArchivo.setText("ERROR AL SELECCIONAR EL ARCHIVO");
+		        }
+			}
+		});
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(141, 122, 122, 23);
 		panel.add(btnCancelar);
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false); //you can't see me!
+				dispose(); //Destroy the JFrame object
+			}
+		});
+		
 		
 	}
 }

@@ -14,10 +14,13 @@ import javax.swing.JTextField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Font;
 import java.awt.Color;
@@ -28,6 +31,8 @@ import java.util.Properties;
 
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import modelo.Cancion;
 import repositorio.CancionRepositorio;
@@ -52,9 +57,9 @@ public class Inicio extends JFrame {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTable table;
-	private String [] columnas ={"titulo","reproducciones","artista","genero"};
-	private String [][] datos ={{"aaaa", "bbbb"},
-			{"aaaa", "bbbb"}};
+//	private String [] columnas ={"titulo","reproducciones","artista","genero"};
+//	private String [][] datos ={{"aaaa", "bbbb"},
+//			{"aaaa", "bbbb"}};
 	
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 			
@@ -184,6 +189,28 @@ public class Inicio extends JFrame {
 		table.setBorder(new LineBorder(new Color(173, 255, 47), 2, true));
 		table.setBackground(new Color(255, 255, 255));
 		table.setBounds(21, 75, 517, 177);
+		
+//		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+//	        public void valueChanged(ListSelectionEvent event) {
+//	            // do some actions here, for example
+//	            // print first column value from selected row
+//	            System.out.println(table.getValueAt(table.getSelectedRow(), 4).toString());
+//	        }
+//	    });
+		
+		table.addMouseListener(new MouseAdapter() {
+		    public void mousePressed(MouseEvent me) {
+		        JTable table =(JTable) me.getSource();
+		        Point p = me.getPoint();
+		        int row = table.rowAtPoint(p);
+		        if (me.getClickCount() == 2) {
+		        	int id = Integer.parseInt((String) table.getValueAt(row, 4));
+		        	System.out.println(id);
+		        	Reproductor.init(id);
+		        }
+		    }
+		});
+		
 		panel.add(table);
 		
 		JTextPane txtpnReproducciones = new JTextPane();

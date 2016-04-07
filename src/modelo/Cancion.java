@@ -78,4 +78,7 @@ public class Cancion {
 	public void setArchivo(FileInputStream archivo) {
 		this.archivo = archivo;
 	}
+	public String toString(){
+		return this.id +"-"+ this.nombre +"-"+ this.artista +"-"+ this.genero +"-"+ this.reproducciones +"-"+ this.duracion;
+	}
 }

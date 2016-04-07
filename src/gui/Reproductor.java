@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 import javazoom.jl.decoder.JavaLayerException;
@@ -15,6 +16,7 @@ import modelo.PausablePlayer;
 import repositorio.CancionRepositorio;
 
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,34 +32,34 @@ public class Reproductor extends JFrame{
 	
 	private PausablePlayer player;
 	
-	private boolean status = false;
+	//private boolean status = false;
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
+	public static void init(final int id){
+
 					// select Look and Feel
-		            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-		            Reproductor frame = new Reproductor();
+		            try {
+						UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+					} catch (ClassNotFoundException | InstantiationException
+							| IllegalAccessException
+							| UnsupportedLookAndFeelException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		            Reproductor frame = new Reproductor(id);
 					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+
 	}
 	
-	public Reproductor() {
+	public Reproductor(int id) {
+		
+		Cancion c = cancionRepositorio.seleccionarCancion(id);
 		
 		try {
-            File file = new File("data/blob.mp3");
-        	FileInputStream fileInput = new FileInputStream(file);
-        	Cancion cancion = new Cancion(1, "", "", "", 0, 0, fileInput);
-    		//Cancion cancion = cancionRepositorio.seleccionarCancion(1);
-            player = new PausablePlayer(cancion.getArchivo());
+            player = new PausablePlayer(c.getArchivo());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		
 		setTitle("Reproductor - Spotifree");
 		
@@ -80,7 +82,7 @@ public class Reproductor extends JFrame{
 		txtTitulo.setForeground(Color.BLACK);
 		txtTitulo.setEditable(false);
 		txtTitulo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		txtTitulo.setBounds(19, 18, 304, 20);
+		txtTitulo.setBounds(19, 18, 64, 20);
 		txtTitulo.setText("TITULO");
 		txtTitulo.setOpaque(false);
 		panel.add(txtTitulo);
@@ -116,7 +118,7 @@ public class Reproductor extends JFrame{
 		txtpnArtista.setOpaque(false);
 		txtpnArtista.setFont(new Font("Tahoma", Font.BOLD, 11));
 		txtpnArtista.setEditable(false);
-		txtpnArtista.setBounds(19, 58, 304, 20);
+		txtpnArtista.setBounds(19, 58, 64, 20);
 		panel.add(txtpnArtista);
 		
 		JTextPane txtpnGenero = new JTextPane();
@@ -125,7 +127,7 @@ public class Reproductor extends JFrame{
 		txtpnGenero.setOpaque(false);
 		txtpnGenero.setFont(new Font("Tahoma", Font.BOLD, 11));
 		txtpnGenero.setEditable(false);
-		txtpnGenero.setBounds(19, 103, 304, 20);
+		txtpnGenero.setBounds(19, 103, 64, 20);
 		panel.add(txtpnGenero);
 		
 		JButton button_1 = new JButton("Recomendar a un amigo");
@@ -136,7 +138,35 @@ public class Reproductor extends JFrame{
 		button_1.setBounds(42, 170, 277, 39);
 		panel.add(button_1);
 		
+		JTextPane txtpnAsd = new JTextPane();
+		txtpnAsd.setText(c.getNombre());
+		txtpnAsd.setOpaque(false);
+		txtpnAsd.setForeground(Color.BLACK);
+		txtpnAsd.setFont(new Font("Tahoma", Font.BOLD, 11));
+		txtpnAsd.setEditable(false);
+		txtpnAsd.setBounds(97, 18, 64, 20);
+		panel.add(txtpnAsd);
 		
+		JTextPane txtpnAsd_1 = new JTextPane();
+		txtpnAsd_1.setText(c.getArtista());
+		txtpnAsd_1.setOpaque(false);
+		txtpnAsd_1.setForeground(Color.BLACK);
+		txtpnAsd_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		txtpnAsd_1.setEditable(false);
+		txtpnAsd_1.setBounds(97, 58, 64, 20);
+		panel.add(txtpnAsd_1);
+		
+		JTextPane txtpnAsd_2 = new JTextPane();
+		txtpnAsd_2.setText(c.getGenero());
+		txtpnAsd_2.setOpaque(false);
+		txtpnAsd_2.setForeground(Color.BLACK);
+		txtpnAsd_2.setFont(new Font("Tahoma", Font.BOLD, 11));
+		txtpnAsd_2.setEditable(false);
+		txtpnAsd_2.setBounds(97, 103, 64, 20);
+		panel.add(txtpnAsd_2);
+		
+		//Para no cerrar todos los frames
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 	}
 }
