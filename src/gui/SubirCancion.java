@@ -20,6 +20,7 @@ import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
 
 import modelo.Cancion;
+import modelo.CancionException;
 import repositorio.CancionRepositorio;
 
 import javax.swing.JButton;
@@ -144,6 +145,7 @@ public class SubirCancion extends JFrame{
 								textGenero.getText(), 0 , duration, fileInput);
 						cancionRepositorio.subirCancion(cancion);
 					}
+				} catch (CancionException e1) {
 				} catch (FileNotFoundException e1) {
 				} catch (CannotReadException e1) {
 				} catch (TagException e1) {

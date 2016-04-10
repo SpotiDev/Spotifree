@@ -35,6 +35,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import modelo.Cancion;
+import modelo.CancionException;
 import repositorio.CancionRepositorio;
 
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
@@ -124,21 +125,22 @@ public class Inicio extends JFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//p.executeQuery("SELECT ID, Nombre, Artista, Genero, Duracion, Reproducciones FROM Cancion WHERE Cancion.Nombre = '"+textBusqueda.getText()+"'" + "OR Cancion.Artista = '"+textBusqueda.getText()+"'" + "OR Cancion.Genero = '"+textBusqueda.getText()+"'");
-				ArrayList<Cancion> list = cancionRepositorio.findCanciones(textBusqueda.getText());
-				DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-				tableModel.setRowCount(0);
-				for (int i = 0; i < list.size(); i++) {
-			        String[] data = new String[5];
-			            data[0] = list.get(i).getNombre();
-			            data[1] = Integer.toString(list.get(i).getReproducciones());
-			            data[2] = list.get(i).getArtista();
-			            data[3] = list.get(i).getGenero();
-			            data[4] = Integer.toString(list.get(i).getId());
-			        tableModel.addRow(data);
-			    }
-			    table.setModel(tableModel);
-			    table.repaint();
-
+				try {
+					ArrayList<Cancion> list = cancionRepositorio.findCanciones(textBusqueda.getText());
+					DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+					tableModel.setRowCount(0);
+					for (int i = 0; i < list.size(); i++) {
+				        String[] data = new String[5];
+				            data[0] = list.get(i).getNombre();
+				            data[1] = Integer.toString(list.get(i).getReproducciones());
+				            data[2] = list.get(i).getArtista();
+				            data[3] = list.get(i).getGenero();
+				            data[4] = Integer.toString(list.get(i).getId());
+				        tableModel.addRow(data);
+				    }
+				    table.setModel(tableModel);
+				    table.repaint();
+				} catch (CancionException e) { }
 			}
 		});
 		btnBuscar.setBounds(435, 14, 103, 23);
@@ -264,20 +266,22 @@ public class Inicio extends JFrame {
 		cargarUltimasCanciones();
 	}
 	
-	public void cargarUltimasCanciones(){
-		ArrayList<Cancion> list = cancionRepositorio.findLastest();
-		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-		tableModel.setRowCount(0);
-		for (int i = 0; i < list.size(); i++) {
-	        String[] data = new String[5];
-	            data[0] = list.get(i).getNombre();
-	            data[1] = Integer.toString(list.get(i).getReproducciones());
-	            data[2] = list.get(i).getArtista();
-	            data[3] = list.get(i).getGenero();
-	            data[4] = Integer.toString(list.get(i).getId());
-	        tableModel.addRow(data);
-	    }
-	    table.setModel(tableModel);
-	    table.repaint();
+	public void cargarUltimasCanciones() {
+		try {
+			ArrayList<Cancion> list = cancionRepositorio.findLastest();
+			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+			tableModel.setRowCount(0);
+			for (int i = 0; i < list.size(); i++) {
+		        String[] data = new String[5];
+		            data[0] = list.get(i).getNombre();
+		            data[1] = Integer.toString(list.get(i).getReproducciones());
+		            data[2] = list.get(i).getArtista();
+		            data[3] = list.get(i).getGenero();
+		            data[4] = Integer.toString(list.get(i).getId());
+		        tableModel.addRow(data);
+		    }
+		    table.setModel(tableModel);
+		    table.repaint();
+		} catch(CancionException e) { }
 	}
 }

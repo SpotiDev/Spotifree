@@ -12,17 +12,15 @@ import javax.swing.border.EmptyBorder;
 
 import javazoom.jl.decoder.JavaLayerException;
 import modelo.Cancion;
+import modelo.CancionException;
 import modelo.PausablePlayer;
 import repositorio.CancionRepositorio;
 
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileInputStream;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import java.awt.EventQueue;
 
 public class Reproductor extends JFrame{
 	
@@ -36,21 +34,21 @@ public class Reproductor extends JFrame{
 	
 	public static void init(final int id){
 
-					// select Look and Feel
-		            try {
-						UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-					} catch (ClassNotFoundException | InstantiationException
-							| IllegalAccessException
-							| UnsupportedLookAndFeelException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-		            Reproductor frame = new Reproductor(id);
-					frame.setVisible(true);
-
+		// select Look and Feel
+        try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+            Reproductor frame = new Reproductor(id);
+			frame.setVisible(true);
+        } catch (CancionException | ClassNotFoundException
+        		| InstantiationException
+				| IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public Reproductor(int id) {
+	public Reproductor(int id) throws CancionException {
 		
 		Cancion c = cancionRepositorio.seleccionarCancion(id);
 		

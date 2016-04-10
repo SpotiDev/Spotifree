@@ -13,13 +13,43 @@ public class Cancion {
 	private FileInputStream archivo;
 	
 	public Cancion(int id, String nombre, String artista, String genero, int reproducciones,
-			int duracion, FileInputStream archivo) {
-		this.id = id;
-		this.nombre = nombre;
-		this.artista = artista;
-		this.genero = genero;
-		this.reproducciones = reproducciones;
-		this.duracion = duracion;
+			int duracion, FileInputStream archivo) throws CancionException {
+		if (id < 0) {
+			throw new CancionException();
+		}
+		else {
+			this.id = id;
+		}
+		if (nombre == null || nombre.equals("")) {
+			throw new CancionException();
+		}
+		else {
+			this.nombre = nombre;
+		}
+		if (artista == null || artista.equals("")) {
+			throw new CancionException();
+		}
+		else {
+			this.artista = artista;
+		}
+		if (genero == null || genero.equals("")) {
+			throw new CancionException();
+		}
+		else {
+			this.genero = genero;
+		}
+		if (reproducciones < 0) {
+			throw new CancionException();
+		}
+		else {
+			this.reproducciones = reproducciones;
+		}
+		if (duracion == 0) {
+			throw new CancionException();
+		}
+		else {
+			this.duracion = duracion;
+		}
 		this.archivo = archivo;
 	}
 

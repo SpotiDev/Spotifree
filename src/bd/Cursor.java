@@ -1,10 +1,8 @@
 package bd;
-import java.io.ByteArrayInputStream;
-import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -85,7 +83,6 @@ public class Cursor implements Iterable<Cursor> {
 	public FileInputStream getFileInputStream(String name) {
 		FileInputStream fileInputStream = null;
 		try {
-			rs.next();
 			Blob blob = rs.getBlob(name); 
 			byte[] bytes = blob.getBytes(1, (int) blob.length());
 			FileOutputStream fos = new FileOutputStream("download.mp3");

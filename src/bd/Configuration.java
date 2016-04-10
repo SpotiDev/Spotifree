@@ -1,4 +1,5 @@
 package bd;
+
 /**
  * Interfaz para representar una configuracion de base de datos.
  *

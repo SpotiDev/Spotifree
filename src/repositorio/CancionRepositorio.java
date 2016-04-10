@@ -6,6 +6,7 @@ import bd.ConexionBD;
 import bd.Cursor;
 import bd.JDBCTemplate;
 import modelo.Cancion;
+import modelo.CancionException;
 
 public class CancionRepositorio {
 
@@ -22,13 +23,16 @@ public class CancionRepositorio {
 				cancion.getReproducciones(), cancion.getDuracion(), cancion.getArchivo());
 	}
 	
-	public Cancion seleccionarCancion(int id) {
+	public Cancion seleccionarCancion(int id) throws CancionException {
 		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion, Archivo FROM Cancion WHERE ID = " + id;
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
-		Cancion cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
-				cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
-				cursor.getFileInputStream("archivo"));
-		System.out.println(cancion.toString());
+		Cancion cancion = null;
+		if (cursor.iterator().hasNext()) {
+			cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
+					cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
+					cursor.getFileInputStream("archivo"));
+			System.out.println(cancion.toString());
+		}
 		return cancion;
 	}
 	
@@ -38,7 +42,7 @@ public class CancionRepositorio {
 //		return cursor.getInteger("Maxid");
 //	}
 	
-	public ArrayList<Cancion> findCanciones (String busqueda){
+	public ArrayList<Cancion> findCanciones (String busqueda) throws CancionException {
 		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion WHERE Cancion.Nombre LIKE '%"+busqueda+"%'" + "OR Cancion.Artista LIKE '%"+busqueda+"%'" + "OR Cancion.Genero LIKE '%"+busqueda+"%'";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
 		ArrayList<Cancion> listaCanciones = new ArrayList<>();
@@ -56,7 +60,7 @@ public class CancionRepositorio {
 		return listaCanciones;
 	}
 	
-	public ArrayList<Cancion> findLastest (){
+	public ArrayList<Cancion> findLastest () throws CancionException{
 		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
 		ArrayList<Cancion> listaCanciones = new ArrayList<>();
