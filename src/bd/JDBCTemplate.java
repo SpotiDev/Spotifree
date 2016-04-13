@@ -111,6 +111,7 @@ public class JDBCTemplate {
 				System.out.println();
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Error: " + e.getMessage());
 		} finally {
 			System.out
@@ -195,4 +196,75 @@ public class JDBCTemplate {
 		}
 		return null;
 	}
+	
+	
+	public int executeQueryCount(String sql) {
+		Statement stmt = null;
+		try {
+			System.out
+					.println("---------------------------------------------------------------------------------------");
+			stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+			
+			while (rs.next()) {// Por cada tupla
+				// creamos una linea con la informacion:
+				for (int j = 1; j <= numberOfColumns; j++) {
+					System.out.print(" " + rs.getInt(j) + "\t | ");
+					return rs.getInt(j);
+				}
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		} finally {
+			System.out
+					.println("---------------------------------------------------------------------------------------");
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+		return 0;
+	}
+	
+	
+	public String executeQueryBuscar(String sql) {
+		Statement stmt = null;
+		try {
+			System.out
+					.println("---------------------------------------------------------------------------------------");
+			stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numberOfColumns = rsmd.getColumnCount();
+			
+			while (rs.next()) {// Por cada tupla
+				// creamos una linea con la informacion:
+				for (int j = 1; j <= numberOfColumns; j++) {
+					System.out.print(" " + rs.getString(j) + "\t | ");
+					return rs.getString(j);
+				}
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		} finally {
+			System.out
+					.println("---------------------------------------------------------------------------------------");
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+		return "";
+	}
 }
+		
