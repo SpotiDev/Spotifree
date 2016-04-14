@@ -61,7 +61,7 @@ public class CancionRepositorio {
 	}
 	
 	public ArrayList<Cancion> findLastest () throws CancionException{
-		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion";
+		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion ORDER BY ID, Reproducciones DESC";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
 		ArrayList<Cancion> listaCanciones = new ArrayList<>();
 		int i = 1; //Max 10 canciones

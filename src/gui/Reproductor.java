@@ -2,13 +2,19 @@ package gui;
 
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import javazoom.jl.decoder.JavaLayerException;
 import modelo.Cancion;
@@ -21,6 +27,14 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 
 public class Reproductor extends JFrame{
 	
@@ -29,6 +43,8 @@ public class Reproductor extends JFrame{
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 	
 	private PausablePlayer player;
+	
+	JFileChooser chooser;
 	
 	//private boolean status = false;
 	
@@ -50,7 +66,7 @@ public class Reproductor extends JFrame{
 	
 	public Reproductor(int id) throws CancionException {
 		
-		Cancion c = cancionRepositorio.seleccionarCancion(id);
+		final Cancion c = cancionRepositorio.seleccionarCancion(id);
 		
 		try {
             player = new PausablePlayer(c.getArchivo());
@@ -63,7 +79,7 @@ public class Reproductor extends JFrame{
 		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 360, 261);
+		setBounds(100, 100, 494, 372);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -86,6 +102,15 @@ public class Reproductor extends JFrame{
 		panel.add(txtTitulo);
 		
 		JButton btnPlay = new JButton("Play");
+		Image img2 = null;
+		try {
+			img2 = ImageIO.read(new File("lib/img/play.png"));
+			img2 = img2.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		btnPlay.setIcon(new ImageIcon(img2));
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -96,10 +121,19 @@ public class Reproductor extends JFrame{
 				}
 			}
 		});
-		btnPlay.setBounds(201, 135, 122, 23);
+		btnPlay.setBounds(201, 135, 55, 50);
 		panel.add(btnPlay);
 		
 		JButton button = new JButton("Stop");
+		Image img = null;
+		try {
+			img = ImageIO.read(new File("lib/img/stop.png"));
+			img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	    button.setIcon(new ImageIcon(img));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (player.isPlaying()) {
@@ -107,7 +141,7 @@ public class Reproductor extends JFrame{
 				}
 			}
 		});
-		button.setBounds(39, 135, 122, 23);
+		button.setBounds(39, 135, 55, 55);
 		panel.add(button);
 		
 		JTextPane txtpnArtista = new JTextPane();
@@ -133,7 +167,7 @@ public class Reproductor extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		button_1.setBounds(42, 170, 277, 39);
+		button_1.setBounds(109, 241, 277, 39);
 		panel.add(button_1);
 		
 		JTextPane txtpnAsd = new JTextPane();
@@ -163,8 +197,57 @@ public class Reproductor extends JFrame{
 		txtpnAsd_2.setBounds(97, 103, 64, 20);
 		panel.add(txtpnAsd_2);
 		
+		//File Chooser
+		final JFileChooser fc = new JFileChooser();
+		fc.setCurrentDirectory(new java.io.File("."));
+	    fc.setDialogTitle("Selecciona Destino");
+	    fc.setApproveButtonText("Descargar");
+	    fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setAcceptAllFileFilterUsed(false); //Desactivamos opcion all files
+		
+		JButton btnDescargarCancion = new JButton("Descargar Cancion");
+		btnDescargarCancion.setBackground(Color.GREEN);
+		btnDescargarCancion.setBounds(164, 287, 162, 47);
+		panel.add(btnDescargarCancion);
+		btnDescargarCancion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int returnVal = fc.showOpenDialog(Reproductor.this);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+				      System.out.println("getCurrentDirectory(): " +  fc.getCurrentDirectory());
+				      System.out.println("getSelectedFile() : " +  fc.getSelectedFile());
+				      try {
+						copyFiles("download.mp3",fc.getSelectedFile().getPath()+"/" + c.getArtista() + " - " + c.getNombre()+".mp3");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        } else {
+		        	System.out.println("No Selection ");		        
+		        	}
+			}
+		});
+		
 		//Para no cerrar todos los frames
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
+	}
+	
+	private void copyFiles(String path1, String path2) throws IOException{
+		File source = new File(path1);
+		File dest = new File(path2);
+		InputStream is = null;
+	    OutputStream os = null;
+	    try {
+	        is = new FileInputStream(source);
+	        os = new FileOutputStream(dest);
+	        byte[] buffer = new byte[1024];
+	        int length;
+	        while ((length = is.read(buffer)) > 0) {
+	            os.write(buffer, 0, length);
+	        }
+	    } finally {
+	        is.close();
+	        os.close();
+	    }
 	}
 }
