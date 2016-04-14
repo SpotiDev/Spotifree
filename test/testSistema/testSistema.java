@@ -1,4 +1,5 @@
-package testModelo;
+package testSistema;
+
 
 import static org.junit.Assert.*;
 
@@ -28,7 +29,7 @@ public class testSistema {
 	private JDBCTemplate p;
 
 	/**
-	 * añade una cancion
+	 * aï¿½ade una cancion
 	 * @throws CancionException
 	 * @throws CannotReadException
 	 * @throws IOException
@@ -42,7 +43,7 @@ public class testSistema {
 		p = ConexionBD.conectar();
 		int numCanciones = p.executeQueryCount("SELECT COUNT(*) FROM Cancion");
 		
-		File f = new File ("animals020.mp3");
+		File f = new File ("test_NO_BORRAR.mp3");
 		CancionRepositorio cancionRepositorio = new CancionRepositorio();
 		if (f != null){
 			FileInputStream fileInput = new FileInputStream(f);
@@ -106,7 +107,7 @@ public class testSistema {
 	@Test (expected = CancionException.class)
 	public void test5() throws CancionException, CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
 		
-		File f = new File ("animals020.mp3");
+		File f = new File ("test_NO_BORRAR.mp3");
 		CancionRepositorio cancionRepositorio = new CancionRepositorio();
 		if (f != null){
 			FileInputStream fileInput = new FileInputStream(f);
@@ -121,7 +122,7 @@ public class testSistema {
 	
 	@Test 
 	public void testSubirBuscarCancion() throws CancionException, CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-		File f = new File ("animals020.mp3");
+		File f = new File ("test_NO_BORRAR.mp3");
 		CancionRepositorio cancionRepositorio = new CancionRepositorio();
 		if (f != null){
 			FileInputStream fileInput = new FileInputStream(f);

@@ -23,7 +23,7 @@ public class testCancion {
 	
 	@Test
 	public void testCancionOK() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, NOMBRE, ARTISTA, GENERO, REPRODUCCIONES, DURACION, fileInput);
 		assertEquals(cancion.toString(), ID +"-"+ NOMBRE +"-"+ ARTISTA +"-"+ GENERO
@@ -32,63 +32,63 @@ public class testCancion {
 	
 	@Test (expected = CancionException.class)
 	public void testIdNegativo() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(-1, NOMBRE, ARTISTA, GENERO, REPRODUCCIONES, DURACION, fileInput);
 	}
 	
 	@Test (expected = CancionException.class)
 	public void testNombreVacio() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, "", ARTISTA, GENERO, REPRODUCCIONES, DURACION, fileInput);
 	}
 	
 	@Test (expected = CancionException.class)
 	public void testCancionNombreNull() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, null, ARTISTA, GENERO, REPRODUCCIONES, DURACION, fileInput);
 	}
 	
 	@Test (expected = CancionException.class)
 	public void testArtistaVacio() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, NOMBRE, "", GENERO, REPRODUCCIONES, DURACION, fileInput);
 	}
 	
 	@Test (expected = CancionException.class)
 	public void testArtistaNull() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, NOMBRE, null, GENERO, REPRODUCCIONES, DURACION, fileInput);
 	}
 	
 	@Test (expected = CancionException.class)
 	public void testCancionGeneroVacio() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, NOMBRE, ARTISTA, "", REPRODUCCIONES, DURACION, fileInput);
 	}
 	
 	@Test (expected = CancionException.class)
 	public void testGeneroNull() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, NOMBRE, ARTISTA, null, REPRODUCCIONES, DURACION, fileInput);
 	}
 	
 	@Test (expected = CancionException.class)
 	public void testReproduccionMayorIgual0() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, NOMBRE, ARTISTA, GENERO, -2, DURACION, fileInput);
 	}
 	
 	@Test (expected = CancionException.class)
 	public void testDuracionMayor0() throws FileNotFoundException, CancionException {
-		File file = new File("download.mp3");
+		File file = new File("test_NO_BORRAR.mp3");
 		FileInputStream fileInput = new FileInputStream(file);
 		Cancion cancion = new Cancion(ID, NOMBRE, ARTISTA, GENERO, REPRODUCCIONES, 0, fileInput);
 	}
