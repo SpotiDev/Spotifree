@@ -13,8 +13,6 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import javazoom.jl.decoder.JavaLayerException;
 import modelo.Cancion;
@@ -29,14 +27,12 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.FileChannel;
 
-public class Reproductor extends JFrame{
+public class Reproductor extends JFrame {
 	
 	private JPanel contentPane;
 	
@@ -48,7 +44,7 @@ public class Reproductor extends JFrame{
 	
 	//private boolean status = false;
 	
-	public static void init(final int id){
+	public static void init(final int id) {
 
 		// select Look and Feel
         try {
@@ -67,7 +63,7 @@ public class Reproductor extends JFrame{
 	public Reproductor(int id) throws CancionException {
 		
 		final Cancion c = cancionRepositorio.seleccionarCancion(id);
-
+		
 		setTitle("Reproductor - Spotifree");
 		
 		setResizable(false);
@@ -108,17 +104,14 @@ public class Reproductor extends JFrame{
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					try {
-						if (player == null){
-				            player = new PausablePlayer(c.getArchivo());
-						}
-					} catch (Exception ee) {
-						ee.printStackTrace();
+					if (player == null) {
+						Cancion c = cancionRepositorio.seleccionarCancion(id);
+			            player = new PausablePlayer(c.getArchivo());
 					}
-					if (player.isNotStarted() || player.isPaused()) {
+					if (player.isNotStarted() || player.isPaused() || player.isFinished()) {
 						player.play();
 					}
-				} catch (JavaLayerException e1) {
+				} catch (JavaLayerException | CancionException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -138,25 +131,9 @@ public class Reproductor extends JFrame{
 		buttonStop.setIcon(new ImageIcon(img));
 		buttonStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if ( player != null){
-					if (player.isPlaying()) {
-						player.stop();
-						player.close();
-						player = null;
-						try {
-							c.getArchivo().close();
-						} catch (IOException e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						}
-						try {
-							player = new PausablePlayer(c.getArchivo());
-						} catch (JavaLayerException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-							System.out.println("ERROR en Stop");
-						}
-					}
+				if (player.isPlaying()) {
+					player.stop();
+					player = null;
 				}
 			}
 		});
@@ -258,10 +235,8 @@ public class Reproductor extends JFrame{
 		buttonPause.setIcon(new ImageIcon(imgPause));
 		buttonPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (player != null){
-					if (player.isPlaying()) {
-						player.pause();
-					}
+				if (player.isPlaying()) {
+					player.pause();
 				}
 			}
 		});
