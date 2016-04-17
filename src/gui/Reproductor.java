@@ -66,14 +66,8 @@ public class Reproductor extends JFrame{
 	
 	public Reproductor(int id) throws CancionException {
 		
-		final Cancion c = cancionRepositorio.seleccionarCancion(id);
-		
-		try {
-            player = new PausablePlayer(c.getArchivo());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		Cancion c = cancionRepositorio.seleccionarCancion(id);
+
 		
 		setTitle("Reproductor - Spotifree");
 		
@@ -101,7 +95,8 @@ public class Reproductor extends JFrame{
 		txtTitulo.setOpaque(false);
 		panel.add(txtTitulo);
 		
-		JButton btnPlay = new JButton("Play");
+		JButton btnPlay = new JButton(); //play
+		
 		Image img2 = null;
 		try {
 			img2 = ImageIO.read(new File("lib/img/play.png"));
@@ -114,17 +109,24 @@ public class Reproductor extends JFrame{
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					try {
+			            player = new PausablePlayer(c.getArchivo());
+					} catch (Exception ee) {
+						ee.printStackTrace();
+					}
 					if (player.isNotStarted() || player.isPaused()) {
+						
 						player.play();
 					}
 				} catch (JavaLayerException e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
-		btnPlay.setBounds(201, 135, 55, 50);
+		btnPlay.setBounds(151, 135, 55, 55);
 		panel.add(btnPlay);
 		
-		JButton button = new JButton("Stop");
+		JButton buttonStop = new JButton(); //stop
 		Image img = null;
 		try {
 			img = ImageIO.read(new File("lib/img/stop.png"));
@@ -133,16 +135,16 @@ public class Reproductor extends JFrame{
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-	    button.setIcon(new ImageIcon(img));
-		button.addActionListener(new ActionListener() {
+		buttonStop.setIcon(new ImageIcon(img));
+		buttonStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (player.isPlaying()) {
-					player.pause();
+					player.stop();
 				}
 			}
 		});
-		button.setBounds(39, 135, 55, 55);
-		panel.add(button);
+		buttonStop.setBounds(234, 135, 55, 55);
+		panel.add(buttonStop);
 		
 		JTextPane txtpnArtista = new JTextPane();
 		txtpnArtista.setForeground(Color.BLACK);
@@ -209,6 +211,61 @@ public class Reproductor extends JFrame{
 		btnDescargarCancion.setBackground(Color.GREEN);
 		btnDescargarCancion.setBounds(164, 287, 162, 47);
 		panel.add(btnDescargarCancion);
+		
+		JButton buttonAtras = new JButton();
+		Image imgAtras = null;
+		try {
+			imgAtras = ImageIO.read(new File("lib/img/backward.png"));
+			imgAtras = imgAtras.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		buttonAtras.setIcon(new ImageIcon(imgAtras));
+		buttonAtras.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		buttonAtras.setBounds(72, 135, 55, 55);
+		panel.add(buttonAtras);
+		
+		JButton buttonPause = new JButton();
+		Image imgPause = null;
+		try {
+			imgPause = ImageIO.read(new File("lib/img/pause.png"));
+			imgPause = imgPause.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		buttonPause.setIcon(new ImageIcon(imgPause));
+		buttonPause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (player.isPlaying()) {
+					player.pause();
+				}
+			}
+		});
+		buttonPause.setBounds(314, 135, 55, 55);
+		panel.add(buttonPause);
+		
+		JButton buttonForward = new JButton();
+		Image imgForward = null;
+		try {
+			imgForward = ImageIO.read(new File("lib/img/forward.png"));
+			imgForward = imgForward.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		buttonForward.setIcon(new ImageIcon(imgForward));
+		buttonForward.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		buttonForward.setBounds(400, 135, 55, 55);
+		panel.add(buttonForward);
+		
 		btnDescargarCancion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int returnVal = fc.showOpenDialog(Reproductor.this);

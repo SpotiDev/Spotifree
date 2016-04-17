@@ -37,24 +37,32 @@ public class PausablePlayer {
         synchronized (playerLock) {
             switch (playerStatus) {
                 case NOT_STARTED:
-                    final Runnable r = new Runnable() {
-                        public void run() {
-                            playInternal();
-                        }
-                    };
-                    final Thread t = new Thread(r);
-                    t.setDaemon(true);
-                    t.setPriority(Thread.MAX_PRIORITY);
-                    playerStatus = PLAYING;
-                    t.start();
+                	iniciarCancion();
                     break;
                 case PAUSED:
                     resume();
                     break;
+                case PLAYING:
+                	resume();
+                	break;
                 default:
                     break;
             }
         }
+    }
+    
+    
+    public void iniciarCancion(){
+    	playerStatus = PLAYING;
+    	final Runnable r = new Runnable() {
+            public void run() {
+                playInternal();
+            }
+        };
+        final Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setPriority(Thread.MAX_PRIORITY);
+        t.start();
     }
 
     /**
@@ -85,15 +93,21 @@ public class PausablePlayer {
     /**
      * Stops playback. If not playing, does nothing
      */
-    public void stop() {
+    public boolean stop() {
         synchronized (playerLock) {
-            playerStatus = FINISHED;
-            playerLock.notifyAll();
+        	if(playerStatus == PLAYING){
+        		playerStatus = NOT_STARTED;
+               // playerLock.notifyAll();
+        	}
+        	return playerStatus == NOT_STARTED;
         }
     }
 
     private void playInternal() {
         while (playerStatus != FINISHED) {
+        	if(playerStatus == NOT_STARTED){
+        		break;
+        	}
             try {
                 if (!player.play(1)) {
                     break;
@@ -121,10 +135,14 @@ public class PausablePlayer {
      */
     public void close() {
         synchronized (playerLock) {
-            playerStatus = FINISHED;
+            playerStatus = NOT_STARTED;
         }
         try {
+        	
             player.close();
+            
+            int qq = 5;
+            player.play();
         } catch (final Exception e) {
             // ignore, we are terminating anyway
         }
