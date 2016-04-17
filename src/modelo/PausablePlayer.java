@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javazoom.jl.decoder.JavaLayerException;
@@ -21,9 +22,12 @@ public class PausablePlayer {
 
     // status variable what player thread is doing/supposed to do
     private int playerStatus = NOT_STARTED;
+    
+    public InputStream archivo;
 
-    public PausablePlayer(final InputStream inputStream) throws JavaLayerException {
+    public PausablePlayer(InputStream inputStream) throws JavaLayerException {
         this.player = new Player(inputStream);
+        this.archivo = inputStream;
     }
 
     public PausablePlayer(final InputStream inputStream, final AudioDevice audioDevice) throws JavaLayerException {
@@ -37,14 +41,20 @@ public class PausablePlayer {
         synchronized (playerLock) {
             switch (playerStatus) {
                 case NOT_STARTED:
-                	iniciarCancion();
+                    final Runnable r = new Runnable() {
+                        public void run() {
+                            playInternal();
+                        }
+                    };
+                    final Thread t = new Thread(r);
+                    t.setDaemon(true);
+                    t.setPriority(Thread.MAX_PRIORITY);
+                    playerStatus = PLAYING;
+                    t.start();
                     break;
                 case PAUSED:
                     resume();
                     break;
-                case PLAYING:
-                	resume();
-                	break;
                 default:
                     break;
             }
@@ -52,18 +62,18 @@ public class PausablePlayer {
     }
     
     
-    public void iniciarCancion(){
-    	playerStatus = PLAYING;
-    	final Runnable r = new Runnable() {
-            public void run() {
-                playInternal();
-            }
-        };
-        final Thread t = new Thread(r);
-        t.setDaemon(true);
-        t.setPriority(Thread.MAX_PRIORITY);
-        t.start();
-    }
+//    public void iniciarCancion(){
+//    	playerStatus = PLAYING;
+//    	final Runnable r = new Runnable() {
+//            public void run() {
+//                playInternal();
+//            }
+//        };
+//        final Thread t = new Thread(r);
+//        t.setDaemon(true);
+//        t.setPriority(Thread.MAX_PRIORITY);
+//        t.start();
+//    }
 
     /**
      * Pauses playback. Returns true if new state is PAUSED.
@@ -93,13 +103,10 @@ public class PausablePlayer {
     /**
      * Stops playback. If not playing, does nothing
      */
-    public boolean stop() {
-        synchronized (playerLock) {
-        	if(playerStatus == PLAYING){
-        		playerStatus = NOT_STARTED;
-               // playerLock.notifyAll();
-        	}
-        	return playerStatus == NOT_STARTED;
+    public void stop() {
+        synchronized (playerLock) {            
+        	playerStatus = FINISHED;
+        	playerLock.notifyAll();
         }
     }
 
@@ -134,15 +141,17 @@ public class PausablePlayer {
      * Closes the player, regardless of current state.
      */
     public void close() {
+    	try {
+			this.archivo.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         synchronized (playerLock) {
-            playerStatus = NOT_STARTED;
+            playerStatus = FINISHED;
         }
-        try {
-        	
-            player.close();
-            
-            int qq = 5;
-            player.play();
+        try { 	
+            player.close();     
         } catch (final Exception e) {
             // ignore, we are terminating anyway
         }

@@ -42,7 +42,7 @@ public class Reproductor extends JFrame{
 	
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 	
-	private PausablePlayer player;
+	private PausablePlayer player = null;
 	
 	JFileChooser chooser;
 	
@@ -66,9 +66,8 @@ public class Reproductor extends JFrame{
 	
 	public Reproductor(int id) throws CancionException {
 		
-		Cancion c = cancionRepositorio.seleccionarCancion(id);
+		final Cancion c = cancionRepositorio.seleccionarCancion(id);
 
-		
 		setTitle("Reproductor - Spotifree");
 		
 		setResizable(false);
@@ -110,12 +109,13 @@ public class Reproductor extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					try {
-			            player = new PausablePlayer(c.getArchivo());
+						if (player == null){
+				            player = new PausablePlayer(c.getArchivo());
+						}
 					} catch (Exception ee) {
 						ee.printStackTrace();
 					}
 					if (player.isNotStarted() || player.isPaused()) {
-						
 						player.play();
 					}
 				} catch (JavaLayerException e1) {
@@ -138,8 +138,25 @@ public class Reproductor extends JFrame{
 		buttonStop.setIcon(new ImageIcon(img));
 		buttonStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (player.isPlaying()) {
-					player.stop();
+				if ( player != null){
+					if (player.isPlaying()) {
+						player.stop();
+						player.close();
+						player = null;
+						try {
+							c.getArchivo().close();
+						} catch (IOException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
+						try {
+							player = new PausablePlayer(c.getArchivo());
+						} catch (JavaLayerException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							System.out.println("ERROR en Stop");
+						}
+					}
 				}
 			}
 		});
@@ -241,8 +258,10 @@ public class Reproductor extends JFrame{
 		buttonPause.setIcon(new ImageIcon(imgPause));
 		buttonPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (player.isPlaying()) {
-					player.pause();
+				if (player != null){
+					if (player.isPlaying()) {
+						player.pause();
+					}
 				}
 			}
 		});

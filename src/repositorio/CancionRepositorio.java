@@ -36,6 +36,21 @@ public class CancionRepositorio {
 		return cancion;
 	}
 	
+	public int findReproducciones(int id) {
+		String sql = "SELECT Reproducciones FROM Cancion WHERE ID = " + id;
+		Cursor cursor = p.executeQueryAndGetCursor(sql);
+		int repros = -1;
+		if (cursor.iterator().hasNext()) {
+			repros = cursor.getInteger("reproducciones");	
+		}
+		return repros;
+	}
+	
+	public void updateReproducciones (int id){
+//		String sql = "UPDATE Cancion SET Reproducciones = " + String.valueOf(findReproducciones(id)) + " WHERE ID = " + id;
+//		p.executeQuery(sql);
+	}
+	
 //	public int findMaxId() {
 //		String sql = "SELECT MAX(ID) AS Maxid FROM Cancion";
 //		Cursor cursor = p.executeQueryAndGetCursor(sql);

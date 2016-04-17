@@ -209,6 +209,7 @@ public class Inicio extends JFrame {
 		        	int id = Integer.parseInt((String) table.getValueAt(row, 4));
 		        	System.out.println(id);
 		        	Reproductor.init(id);
+		        	cancionRepositorio.updateReproducciones(id);
 		        }
 		    }
 		});
