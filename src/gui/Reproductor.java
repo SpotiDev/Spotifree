@@ -93,14 +93,21 @@ public class Reproductor extends JFrame {
 		JButton btnPlay = new JButton(); //play
 		
 		Image img2 = null;
+		Image img2Pulsar = null;
 		try {
 			img2 = ImageIO.read(new File("lib/img/play.png"));
 			img2 = img2.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+			img2Pulsar = ImageIO.read(new File("lib/img/play_2.png"));
+			img2Pulsar = img2Pulsar.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
 		btnPlay.setIcon(new ImageIcon(img2));
+		btnPlay.setRolloverIcon(new ImageIcon(img2Pulsar));
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -125,10 +132,17 @@ public class Reproductor extends JFrame {
 			img = ImageIO.read(new File("lib/img/stop.png"));
 			img = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		Image imgPulsar = null;
+		try {
+			imgPulsar = ImageIO.read(new File("lib/img/stop_2.png"));
+			imgPulsar = imgPulsar.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
 		buttonStop.setIcon(new ImageIcon(img));
+		buttonStop.setRolloverIcon(new ImageIcon(imgPulsar));
 		buttonStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (player.isPlaying()) {
@@ -212,12 +226,20 @@ public class Reproductor extends JFrame {
 			imgAtras = ImageIO.read(new File("lib/img/backward.png"));
 			imgAtras = imgAtras.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		Image imgAtrasPulsar = null;
+		try {
+			imgAtrasPulsar = ImageIO.read(new File("lib/img/backward_2.png"));
+			imgAtrasPulsar = imgAtrasPulsar.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
 		buttonAtras.setIcon(new ImageIcon(imgAtras));
+		buttonAtras.setRolloverIcon(new ImageIcon(imgAtrasPulsar));
 		buttonAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//TODO: 
 			}
 		});
 		buttonAtras.setBounds(72, 135, 55, 55);
@@ -229,10 +251,17 @@ public class Reproductor extends JFrame {
 			imgPause = ImageIO.read(new File("lib/img/pause.png"));
 			imgPause = imgPause.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		Image imgPausePulsar = null;
+		try {
+			imgPausePulsar = ImageIO.read(new File("lib/img/pause_2.png"));
+			imgPausePulsar = imgPausePulsar.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
 		buttonPause.setIcon(new ImageIcon(imgPause));
+		buttonPause.setRolloverIcon(new ImageIcon(imgPausePulsar));
 		buttonPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (player.isPlaying()) {
@@ -249,12 +278,20 @@ public class Reproductor extends JFrame {
 			imgForward = ImageIO.read(new File("lib/img/forward.png"));
 			imgForward = imgForward.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		Image imgForwardPulsar = null;
+		try {
+			imgForwardPulsar = ImageIO.read(new File("lib/img/forward_2.png"));
+			imgForwardPulsar = imgForwardPulsar.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
 		buttonForward.setIcon(new ImageIcon(imgForward));
+		buttonForward.setRolloverIcon(new ImageIcon(imgForwardPulsar));
 		buttonForward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//TODO
 			}
 		});
 		buttonForward.setBounds(400, 135, 55, 55);
@@ -269,7 +306,6 @@ public class Reproductor extends JFrame {
 				      try {
 						copyFiles("download.mp3",fc.getSelectedFile().getPath()+"/" + c.getArtista() + " - " + c.getNombre()+".mp3");
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 		        } else {
