@@ -56,7 +56,7 @@ public class Inicio extends JFrame {
 	private static JFrame frame;
 	private JTextField textBusqueda;
 	private JTextField textField;
-	private JTextField textField_1;
+	private JPasswordField textField_1;
 	private JTable table;
 //	private String [] columnas ={"titulo","reproducciones","artista","genero"};
 //	private String [][] datos ={{"aaaa", "bbbb"},
@@ -159,7 +159,7 @@ public class Inicio extends JFrame {
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		textField_1 = new JTextField();
+		textField_1 = new JPasswordField();
 		textField_1.setBounds(92, 302, 162, 20);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
@@ -171,9 +171,18 @@ public class Inicio extends JFrame {
 		btnIniciarSesin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JDBCTemplate p = ConexionBD.conectar();
-				p.executeQuery("SELECT * FROM Usuario WHERE Usuario.NombreUsuario = '"+textField.getText()+"'"
-						+ " AND Usuario.Contrasena = '"+textField_1.getText()+"'");
-				ConexionBD.desconectar(p);
+			//	p.executeQuery("SELECT * FROM Usuario WHERE Usuario.NombreUsuario = '"+textField.getText()+"'"
+			//			+ " AND Usuario.Contrasena = '"+textField_1.getText()+"'");
+			//	ConexionBD.desconectar(p);
+				String pass = new String(textField_1.getPassword());
+				String comprobarPW = p.executeQueryBuscar("SELECT Correo FROM Usuario WHERE Usuario.Contrasena = '" + pass + "'");
+				if (textField.getText().equals(comprobarPW)) {
+					// Cambia a la pantalla de logueado
+					Logueado pantallaLogin = new Logueado();
+					pantallaLogin.setVisible(true);
+				} else {
+					//Error				
+				}
 			}
 		});
 		
