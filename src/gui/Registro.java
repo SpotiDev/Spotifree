@@ -128,7 +128,8 @@ public class Registro extends JFrame{
 		txtpnTelefono.setBounds(19, 143, 107, 20);
 		panel.add(txtpnTelefono);
 		
-		
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 		
 	}
 }

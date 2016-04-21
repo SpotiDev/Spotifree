@@ -39,9 +39,11 @@ public class Usuario {
 		}
 		else{
 			throw new UsuarioException();
-		}
-		
-		
+		}	
+	}
+	
+	public String getArtista(){
+		return this.nombrePublico;
 	}
 
 }

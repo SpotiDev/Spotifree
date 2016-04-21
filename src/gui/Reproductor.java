@@ -1,4 +1,4 @@
-package gui;
+	package gui;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -60,7 +60,7 @@ public class Reproductor extends JFrame {
 		}
 	}
 	
-	public Reproductor(int id) throws CancionException {
+	public Reproductor(final int id) throws CancionException {
 		
 		final Cancion c = cancionRepositorio.seleccionarCancion(id);
 		
