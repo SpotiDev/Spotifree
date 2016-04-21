@@ -36,7 +36,10 @@ import javax.swing.event.ListSelectionListener;
 
 import modelo.Cancion;
 import modelo.CancionException;
+import modelo.Usuario;
+import modelo.UsuarioException;
 import repositorio.CancionRepositorio;
+import repositorio.UsuarioRepositorio;
 
 import com.jtattoo.plaf.smart.SmartLookAndFeel;
 
@@ -58,6 +61,10 @@ public class Inicio extends JFrame {
 	private JTextField textField;
 	private JPasswordField textField_1;
 	private JTable table;
+	boolean logueado = false;
+	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+	Usuario u;
+	
 //	private String [] columnas ={"titulo","reproducciones","artista","genero"};
 //	private String [][] datos ={{"aaaa", "bbbb"},
 //			{"aaaa", "bbbb"}};
@@ -154,6 +161,22 @@ public class Inicio extends JFrame {
 		txtpnNombre.setOpaque(false);
 		panel.add(txtpnNombre);
 		
+		JTextPane txtpnCorreo = new JTextPane();
+		txtpnCorreo.setText("Correo");
+		txtpnCorreo.setOpaque(false);
+		txtpnCorreo.setForeground(Color.BLACK);
+		txtpnCorreo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		txtpnCorreo.setBounds(38, 278, 42, 20);
+		panel.add(txtpnCorreo);
+		
+		JTextPane txtpnPassword = new JTextPane();
+		txtpnPassword.setText("Password");
+		txtpnPassword.setOpaque(false);
+		txtpnPassword.setForeground(Color.BLACK);
+		txtpnPassword.setFont(new Font("Tahoma", Font.BOLD, 11));
+		txtpnPassword.setBounds(20, 302, 60, 20);
+		panel.add(txtpnPassword);
+		
 		textField = new JTextField();
 		textField.setBounds(92, 278, 162, 20);
 		panel.add(textField);
@@ -177,9 +200,18 @@ public class Inicio extends JFrame {
 				String pass = new String(textField_1.getPassword());
 				String comprobarPW = p.executeQueryBuscar("SELECT Correo FROM Usuario WHERE Usuario.Contrasena = '" + pass + "'");
 				if (textField.getText().equals(comprobarPW)) {
-					// Cambia a la pantalla de logueado
-					Logueado pantallaLogin = new Logueado();
-					pantallaLogin.setVisible(true);
+					try {
+						u = usuarioRepositorio.seleccionarUsuario(comprobarPW);
+					} catch (UsuarioException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					textField.setVisible(false);
+					textField_1.setVisible(false);
+					txtpnCorreo.setVisible(false);
+					txtpnPassword.setVisible(false);
+					btnIniciarSesin.setVisible(false);
+					btnRegistro.setVisible(false);
 				} else {
 					//Error				
 				}
@@ -249,21 +281,6 @@ public class Inicio extends JFrame {
 		txtpnGenero.setBounds(328, 47, 103, 20);
 		panel.add(txtpnGenero);
 		
-		JTextPane txtpnCorreo = new JTextPane();
-		txtpnCorreo.setText("Correo");
-		txtpnCorreo.setOpaque(false);
-		txtpnCorreo.setForeground(Color.BLACK);
-		txtpnCorreo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		txtpnCorreo.setBounds(38, 278, 42, 20);
-		panel.add(txtpnCorreo);
-		
-		JTextPane txtpnPassword = new JTextPane();
-		txtpnPassword.setText("Password");
-		txtpnPassword.setOpaque(false);
-		txtpnPassword.setForeground(Color.BLACK);
-		txtpnPassword.setFont(new Font("Tahoma", Font.BOLD, 11));
-		txtpnPassword.setBounds(20, 302, 60, 20);
-		panel.add(txtpnPassword);
 		
 		JTextPane txtpnId = new JTextPane();
 		txtpnId.setText("Id");
