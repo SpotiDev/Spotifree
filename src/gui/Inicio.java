@@ -40,6 +40,7 @@ import javax.swing.event.ListSelectionListener;
 
 import modelo.Cancion;
 import modelo.CancionException;
+import modelo.ListaReproduccion;
 import modelo.Usuario;
 import modelo.UsuarioException;
 import repositorio.CancionRepositorio;
@@ -49,6 +50,9 @@ import com.jtattoo.plaf.smart.SmartLookAndFeel;
 
 import bd.ConexionBD;
 import bd.JDBCTemplate;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import javax.swing.JComboBox;
 
 /**
  * Pantalla que gestiona el acceso a la aplicacion de los distintos tipos de
@@ -68,6 +72,7 @@ public class Inicio extends JFrame {
 	boolean logueado = false;
 	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 	Usuario u;
+	private ListaReproduccion listaReproduccion;
 
 	//	private String [] columnas ={"titulo","reproducciones","artista","genero"};
 	//	private String [][] datos ={{"aaaa", "bbbb"},
@@ -121,11 +126,14 @@ public class Inicio extends JFrame {
 			}
 		});
 		panel.setLayout(null);
+		
+		JPopupMenu popupMenu = new JPopupMenu();
+		addPopup(panel, popupMenu);
 		panel.add(btnRegistro);
 
 		//Campo de texto busqueda
 		textBusqueda = new JTextField();
-		textBusqueda.setBounds(20, 15, 411, 20);
+		textBusqueda.setBounds(20, 15, 202, 20);
 		panel.add(textBusqueda);
 		textBusqueda.setColumns(10);
 
@@ -154,7 +162,7 @@ public class Inicio extends JFrame {
 				} catch (CancionException e) { }
 			}
 		});
-		btnBuscar.setBounds(435, 14, 103, 23);
+		btnBuscar.setBounds(232, 14, 103, 23);
 		panel.add(btnBuscar);
 
 		JTextPane txtpnNombre = new JTextPane();
@@ -190,6 +198,18 @@ public class Inicio extends JFrame {
 		textField_1.setBounds(92, 302, 162, 20);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
+		
+		
+		
+		final JButton btnListaReproduccion = new JButton("Listas de reproducción");
+		btnListaReproduccion.setBackground(Color.BLACK);
+		btnListaReproduccion.setBounds(77, 278, 141, 47);
+		btnListaReproduccion.setVisible(false);
+		panel.add(btnListaReproduccion);
+		btnListaReproduccion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		
 		final JButton btnSubirCancion = new JButton("Subir Cancion");
 		btnSubirCancion.setBackground(Color.BLACK);
@@ -229,6 +249,7 @@ public class Inicio extends JFrame {
 					btnIniciarSesin.setVisible(false);
 					btnRegistro.setVisible(false);
 					btnSubirCancion.setVisible(true);
+					btnListaReproduccion.setVisible(true);
 				} else {
 					//Error				
 				}
@@ -327,6 +348,24 @@ public class Inicio extends JFrame {
 			txtpnId.setBounds(445, 47, 103, 20);
 			panel.add(txtpnId);
 			
+			JComboBox comboBox = new JComboBox();
+			comboBox.addItem("Seleccione un filtro");
+			comboBox.addItem("Mas reproducciones");
+			comboBox.addItem("Ultimas añadidas");
+			comboBox.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					try{
+						filtra(comboBox.getSelectedIndex());
+					}catch(Exception e2){}
+					
+				}
+			});
+			comboBox.setBounds(382, 15, 141, 20);
+			panel.add(comboBox);
+			
 
 
 			cargarUltimasCanciones();
@@ -349,5 +388,50 @@ public class Inicio extends JFrame {
 			table.setModel(tableModel);
 			table.repaint();
 		} catch(CancionException e) { }
+	}
+	
+	public void cargarCancionesMasReproducidas(){
+		try{
+			ArrayList<Cancion> list = cancionRepositorio.findMasReproducciones();
+			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+			tableModel.setRowCount(0);
+			for (int i = 0; i < list.size(); i++) {
+				String[] data = new String[5];
+				data[0] = list.get(i).getNombre();
+				data[1] = Integer.toString(list.get(i).getReproducciones());
+				data[2] = list.get(i).getArtista();
+				data[3] = list.get(i).getGenero();
+				data[4] = Integer.toString(list.get(i).getId());
+				tableModel.addRow(data);
+			}
+			table.setModel(tableModel);
+			table.repaint();
+		}catch(CancionException e){}
+	}
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
+	
+	private void filtra(int num){
+		if(num == 1){
+			cargarCancionesMasReproducidas();
+		}
+		else if(num == 2){
+			cargarUltimasCanciones();
+		}
 	}
 }

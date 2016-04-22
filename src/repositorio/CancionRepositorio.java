@@ -76,7 +76,7 @@ public class CancionRepositorio {
 	}
 	
 	public ArrayList<Cancion> findLastest () throws CancionException{
-		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion ORDER BY ID, Reproducciones DESC";
+		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion ORDER BY ID DESC";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
 		ArrayList<Cancion> listaCanciones = new ArrayList<>();
 		int i = 1; //Max 10 canciones
@@ -92,5 +92,25 @@ public class CancionRepositorio {
 		System.out.println("Acabo de listar");
 		return listaCanciones;
 	}
+	
+	
+	public ArrayList<Cancion> findMasReproducciones () throws CancionException{
+		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion ORDER BY Reproducciones DESC";
+		Cursor cursor = p.executeQueryAndGetCursor(sql);
+		ArrayList<Cancion> listaCanciones = new ArrayList<>();
+		int i = 1; //Max 10 canciones
+		while (cursor.iterator().hasNext() && i < 10){
+			Cancion cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
+					cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
+					null);
+			cursor.iterator().next();
+			listaCanciones.add(cancion);
+			System.out.println(cancion.toString());
+			i++;
+		}
+		System.out.println("Acabo de listar");
+		return listaCanciones;
+	}
+	
 	
 }

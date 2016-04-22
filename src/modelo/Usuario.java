@@ -42,8 +42,36 @@ public class Usuario {
 		}	
 	}
 	
+	public String getCorreo(){
+		return this.correo;
+	}
+	public void setCorreo(String c){
+		this.correo = c;
+	}
+	
+	public String getNombreUsuario(){
+		return this.nombreUsuario;
+	}
+	public void setNombreUsuario(String nomUser){
+		this.nombreUsuario = nomUser;
+	}
+	
+	public String getNombrePublico(){
+		return this.nombrePublico;
+	}
+	
+	public void setNombrePublico(String nomPublic){
+		this.nombrePublico = nomPublic;
+	}
+	
+	public int getTelefono(){
+		return this.telefono;
+	}
+	public void setTelefono(int tlf){
+		this.telefono = tlf;
+	}
+	
 	public String getArtista(){
 		return this.nombrePublico;
 	}
-
 }
