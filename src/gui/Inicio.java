@@ -80,9 +80,6 @@ public class Inicio extends JFrame {
 
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 
-
-
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -208,6 +205,8 @@ public class Inicio extends JFrame {
 		panel.add(btnListaReproduccion);
 		btnListaReproduccion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ListasReproduccion listaReproduccion = new ListasReproduccion(u);
+				listaReproduccion.setVisible(true);
 			}
 		});
 		
@@ -408,6 +407,26 @@ public class Inicio extends JFrame {
 			table.repaint();
 		}catch(CancionException e){}
 	}
+	
+	public void cargarListaReproduccion(){
+		try{
+			ArrayList<Cancion> list = cancionRepositorio.findMasReproducciones();
+			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+			tableModel.setRowCount(0);
+			for (int i = 0; i < list.size(); i++) {
+				String[] data = new String[5];
+				data[0] = list.get(i).getNombre();
+				data[1] = Integer.toString(list.get(i).getReproducciones());
+				data[2] = list.get(i).getArtista();
+				data[3] = list.get(i).getGenero();
+				data[4] = Integer.toString(list.get(i).getId());
+				tableModel.addRow(data);
+			}
+			table.setModel(tableModel);
+			table.repaint();
+		}catch(CancionException e){}
+	}
+	
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
