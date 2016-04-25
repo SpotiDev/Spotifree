@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
@@ -31,6 +32,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+
+import javax.swing.JLabel;
 
 public class Reproductor extends JFrame {
 	
@@ -41,6 +45,10 @@ public class Reproductor extends JFrame {
 	private PausablePlayer player = null;
 	
 	JFileChooser chooser;
+	
+	int timeLeft;
+	int totalTime;
+	Timer timer = null;
 	
 	//private boolean status = false;
 	
@@ -63,6 +71,8 @@ public class Reproductor extends JFrame {
 	public Reproductor(final int id) throws CancionException {
 		
 		final Cancion c = cancionRepositorio.seleccionarCancion(id);
+		timeLeft  = c.getDuracion()*1000; //En ms
+		totalTime  = c.getDuracion()*1000; //En ms
 		
 		setTitle("Reproductor - Spotifree");
 		
@@ -81,6 +91,14 @@ public class Reproductor extends JFrame {
 		panel.setLayout(null);
 		panel.setLayout(null);
 		
+		final JLabel label = new JLabel();
+		label.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		label.setBounds(169, 202, 157, 27);
+		panel.add(label);
+		SimpleDateFormat df=new SimpleDateFormat("mm:ss");
+        label.setText(df.format(totalTime)+" / "+df.format(timeLeft));
+
+
 		JTextPane txtTitulo = new JTextPane();
 		txtTitulo.setForeground(Color.BLACK);
 		txtTitulo.setEditable(false);
@@ -117,6 +135,20 @@ public class Reproductor extends JFrame {
 					}
 					if (player.isNotStarted() || player.isPaused() || player.isFinished()) {
 						player.play();
+						timer = new Timer (100,new ActionListener() {
+						      @Override
+						      public void actionPerformed(ActionEvent e) {
+						    	  timeLeft -= 100;
+							        SimpleDateFormat df=new SimpleDateFormat("mm:ss");
+							        //c.getDuracion()/60+":"+c.getDuracion()%60 
+							        label.setText(df.format(totalTime)+" / "+df.format(timeLeft));
+							        if(timeLeft<=0)
+							        {
+							            timer.stop();
+							        }
+						      }
+						    });
+						timer.start();
 					}
 				} catch (JavaLayerException | CancionException e1) {
 					e1.printStackTrace();
@@ -145,10 +177,19 @@ public class Reproductor extends JFrame {
 		buttonStop.setRolloverIcon(new ImageIcon(imgPulsar));
 		buttonStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (player.isPlaying()) {
-					player.stop();
-					player = null;
+				if(player != null){
+					if (player.isPlaying()) {
+						player.stop();
+						player = null;
+						if(timer!=null){
+							timer.stop();
+							timeLeft = totalTime;
+					        SimpleDateFormat df=new SimpleDateFormat("mm:ss");
+					        label.setText(df.format(totalTime)+" / "+df.format(timeLeft));
+						}
+					}
 				}
+				
 			}
 		});
 		buttonStop.setBounds(234, 135, 55, 55);
@@ -264,8 +305,13 @@ public class Reproductor extends JFrame {
 		buttonPause.setRolloverIcon(new ImageIcon(imgPausePulsar));
 		buttonPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (player.isPlaying()) {
-					player.pause();
+				if (player !=null){
+					if (player.isPlaying()) {
+						player.pause();
+						if(timer !=null){
+							timer.stop();
+						}
+					}
 				}
 			}
 		});
@@ -296,6 +342,9 @@ public class Reproductor extends JFrame {
 		});
 		buttonForward.setBounds(400, 135, 55, 55);
 		panel.add(buttonForward);
+		
+
+		
 		
 		btnDescargarCancion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

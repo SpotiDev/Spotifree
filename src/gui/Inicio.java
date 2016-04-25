@@ -198,7 +198,7 @@ public class Inicio extends JFrame {
 		
 		
 		
-		final JButton btnListaReproduccion = new JButton("Listas de reproducción");
+		final JButton btnListaReproduccion = new JButton("Listas de reproducciï¿½n");
 		btnListaReproduccion.setBackground(Color.BLACK);
 		btnListaReproduccion.setBounds(77, 278, 141, 47);
 		btnListaReproduccion.setVisible(false);
@@ -347,10 +347,10 @@ public class Inicio extends JFrame {
 			txtpnId.setBounds(445, 47, 103, 20);
 			panel.add(txtpnId);
 			
-			JComboBox comboBox = new JComboBox();
+			final JComboBox comboBox = new JComboBox();
 			comboBox.addItem("Seleccione un filtro");
 			comboBox.addItem("Mas reproducciones");
-			comboBox.addItem("Ultimas añadidas");
+			comboBox.addItem("Ultimas aï¿½adidas");
 			comboBox.addActionListener(new ActionListener() {
 				
 				@Override
