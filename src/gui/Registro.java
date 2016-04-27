@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
 
+@SuppressWarnings("serial")
 public class Registro extends JFrame{
 	
 	private JPanel contentPane;

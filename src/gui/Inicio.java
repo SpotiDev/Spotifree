@@ -31,22 +31,16 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.SystemColor;
 import java.util.ArrayList;
-import java.util.Properties;
 
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import modelo.Cancion;
 import modelo.CancionException;
-import modelo.ListaReproduccion;
 import modelo.Usuario;
 import modelo.UsuarioException;
 import repositorio.CancionRepositorio;
 import repositorio.UsuarioRepositorio;
-
-import com.jtattoo.plaf.smart.SmartLookAndFeel;
 
 import bd.ConexionBD;
 import bd.JDBCTemplate;
@@ -72,7 +66,6 @@ public class Inicio extends JFrame {
 	boolean logueado = false;
 	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 	Usuario u;
-	private ListaReproduccion listaReproduccion;
 
 	//	private String [] columnas ={"titulo","reproducciones","artista","genero"};
 	//	private String [][] datos ={{"aaaa", "bbbb"},
@@ -198,7 +191,7 @@ public class Inicio extends JFrame {
 		
 		
 		
-		final JButton btnListaReproduccion = new JButton("Listas de reproducciï¿½n");
+		final JButton btnListaReproduccion = new JButton("Listas de reproducción");
 		btnListaReproduccion.setBackground(Color.BLACK);
 		btnListaReproduccion.setBounds(77, 278, 141, 47);
 		btnListaReproduccion.setVisible(false);
@@ -254,7 +247,6 @@ public class Inicio extends JFrame {
 				}
 			}
 		});
-
 
 		table = new JTable() {
 			public boolean isCellEditable(int nRow, int nCol) {
@@ -338,7 +330,6 @@ public class Inicio extends JFrame {
 			txtpnGenero.setBounds(328, 47, 103, 20);
 			panel.add(txtpnGenero);
 
-
 			JTextPane txtpnId = new JTextPane();
 			txtpnId.setText("Id");
 			txtpnId.setOpaque(false);
@@ -347,25 +338,21 @@ public class Inicio extends JFrame {
 			txtpnId.setBounds(445, 47, 103, 20);
 			panel.add(txtpnId);
 			
-			final JComboBox comboBox = new JComboBox();
+			JComboBox<String> comboBox = new JComboBox<String>();
 			comboBox.addItem("Seleccione un filtro");
 			comboBox.addItem("Mas reproducciones");
-			comboBox.addItem("Ultimas aï¿½adidas");
+			comboBox.addItem("Ultimas añadidas");
 			comboBox.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
 					try{
 						filtra(comboBox.getSelectedIndex());
 					}catch(Exception e2){}
-					
 				}
 			});
 			comboBox.setBounds(382, 15, 141, 20);
 			panel.add(comboBox);
-			
-
 
 			cargarUltimasCanciones();
 	}
@@ -390,25 +377,6 @@ public class Inicio extends JFrame {
 	}
 	
 	public void cargarCancionesMasReproducidas(){
-		try{
-			ArrayList<Cancion> list = cancionRepositorio.findMasReproducciones();
-			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-			tableModel.setRowCount(0);
-			for (int i = 0; i < list.size(); i++) {
-				String[] data = new String[5];
-				data[0] = list.get(i).getNombre();
-				data[1] = Integer.toString(list.get(i).getReproducciones());
-				data[2] = list.get(i).getArtista();
-				data[3] = list.get(i).getGenero();
-				data[4] = Integer.toString(list.get(i).getId());
-				tableModel.addRow(data);
-			}
-			table.setModel(tableModel);
-			table.repaint();
-		}catch(CancionException e){}
-	}
-	
-	public void cargarListaReproduccion(){
 		try{
 			ArrayList<Cancion> list = cancionRepositorio.findMasReproducciones();
 			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();

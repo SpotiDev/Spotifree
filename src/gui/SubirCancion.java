@@ -42,6 +42,7 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.EventQueue;
 
+@SuppressWarnings("serial")
 public class SubirCancion extends JFrame{
 
 	private JPanel contentPane;

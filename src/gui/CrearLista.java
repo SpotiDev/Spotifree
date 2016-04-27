@@ -6,43 +6,33 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+
+import modelo.ListaReproduccion;
+import modelo.Usuario;
+import repositorio.ListasRepositorio;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
-import java.awt.EventQueue;
 
 @SuppressWarnings("serial")
-public class Recomendacion extends JFrame {
+public class CrearLista extends JFrame{
 	
 	private JPanel contentPane;
 	private JTextField textField;
+	private ListasRepositorio listaRepositorio = new ListasRepositorio();
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					// select Look and Feel
-		            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-		            Recomendacion frame = new Recomendacion();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	
-	public Recomendacion() {
+	public CrearLista(final Usuario u) {
 		
 		setTitle("Spotifree");
 		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 360, 127);
+		setBounds(100, 100, 360, 261);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -55,33 +45,30 @@ public class Recomendacion extends JFrame {
 		panel.setLayout(null);
 		panel.setLayout(null);
 		
-		JTextPane txtNombreUsuario = new JTextPane();
-		txtNombreUsuario.setForeground(Color.BLACK);
-		txtNombreUsuario.setEditable(false);
-		txtNombreUsuario.setFont(new Font("Tahoma", Font.BOLD, 11));
-		txtNombreUsuario.setBounds(19, 19, 203, 20);
-		txtNombreUsuario.setText("Introduce email:");
-		txtNombreUsuario.setOpaque(false);
-		panel.add(txtNombreUsuario);
+		JTextPane txtNombreArtistico = new JTextPane();
+		txtNombreArtistico.setForeground(Color.BLACK);
+		txtNombreArtistico.setFont(new Font("Tahoma", Font.BOLD, 11));
+		txtNombreArtistico.setBounds(19, 50, 107, 20);
+		txtNombreArtistico.setEditable(false);
+		txtNombreArtistico.setText("Título: ");
+		txtNombreArtistico.setOpaque(false);
+		panel.add(txtNombreArtistico);
 		
 		textField = new JTextField();
 		textField.setBounds(129, 19, 188, 20);
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnTerminar = new JButton("Enviar");
+		JButton btnTerminar = new JButton("Crear Lista");
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ListaReproduccion lr = new ListaReproduccion(0, u.getCorreo(), 0, textField.getText());
+				listaRepositorio.crearLista(lr);
 			}
 		});
-		btnTerminar.setBounds(186, 51, 122, 23);
+		btnTerminar.setBounds(195, 175, 122, 23);
 		panel.add(btnTerminar);
 		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(29, 51, 122, 23);
-		panel.add(btnCancelar);
-		
-		
-		
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 	}
 }

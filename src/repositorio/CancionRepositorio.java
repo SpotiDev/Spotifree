@@ -111,4 +111,10 @@ public class CancionRepositorio {
 		System.out.println("Acabo de listar");
 		return listaCanciones;
 	}
+	
+	public int buscarCancion(String nombre) {
+		String sql = "SELECT * FROM Cancion WHERE nombre = '"+nombre+"'";
+		Cursor cursor = p.executeQueryAndGetCursor(sql);
+		return cursor.getInteger("ID");
+	}
 }

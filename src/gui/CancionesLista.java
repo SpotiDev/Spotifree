@@ -1,8 +1,11 @@
 package gui;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
@@ -18,6 +21,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTextPane;
 
+import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Font;
@@ -30,7 +34,6 @@ import javax.swing.border.LineBorder;
 
 import modelo.Cancion;
 import modelo.CancionException;
-import modelo.ListaReproduccion;
 import modelo.Usuario;
 import repositorio.CancionRepositorio;
 import repositorio.ListasRepositorio;
@@ -45,18 +48,21 @@ import java.awt.Component;
  * Fecha: Marzo de 2015
  */
 @SuppressWarnings("serial")
-public class ListasReproduccion extends JFrame {
+public class CancionesLista extends JFrame {
 
 	private JPanel contentPane;
+	private static JFrame frame;
 	private JTextField textBusqueda;
 	private JTable table;
 	boolean logueado = false;
 	Usuario u;
+	int id;
 
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 	private ListasRepositorio listasRepositorio = new ListasRepositorio();
 
-	public ListasReproduccion(final Usuario u) {
+	public CancionesLista(final int id, final Usuario u) {
+		this.id = id;
 		this.u = u;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				"aqui logo"));
@@ -84,19 +90,6 @@ public class ListasReproduccion extends JFrame {
 		panel.add(textBusqueda);
 		textBusqueda.setColumns(10);
 
-		JButton btnCrearLista = new JButton("Crear Lista");
-		btnCrearLista.setBackground(SystemColor.desktop);		
-		btnCrearLista.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnCrearLista.setBounds(382, 278, 141, 47);
-		btnCrearLista.setOpaque(false);
-		panel.add(btnCrearLista);
-		btnCrearLista.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CrearLista crear = new CrearLista(u);
-				crear.setVisible(true);
-			}
-		});
-		
 		//Boton busqueda
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.setBackground(SystemColor.desktop);		
@@ -123,6 +116,19 @@ public class ListasReproduccion extends JFrame {
 		});
 		btnBuscar.setBounds(232, 14, 103, 23);
 		panel.add(btnBuscar);
+		
+		JButton btnAñadirCancion = new JButton("Añadir Cancion");
+		btnAñadirCancion.setBackground(SystemColor.desktop);		
+		btnAñadirCancion.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAñadirCancion.setBounds(382, 278, 141, 47);
+		btnAñadirCancion.setOpaque(false);
+		panel.add(btnAñadirCancion);
+		btnAñadirCancion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AñadirCancion nueva = new AñadirCancion(id,u);
+				nueva.setVisible(true);
+			}
+		});
 
 		JTextPane txtpnNombre = new JTextPane();
 		txtpnNombre.setForeground(new Color(0, 0, 0));
@@ -138,7 +144,7 @@ public class ListasReproduccion extends JFrame {
 			}};
 			DefaultTableModel contactTableModel = (DefaultTableModel) table
 					.getModel();
-			String[] colName = { "Titulo", "Reproducciones", "ID"};
+			String[] colName = { "Nombre", "Artista", "Reproducciones", "Genero", "ID"};
 			contactTableModel.setColumnIdentifiers(colName);
 			table.setModel(contactTableModel);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -152,9 +158,38 @@ public class ListasReproduccion extends JFrame {
 					Point p = me.getPoint();
 					final int row = table.rowAtPoint(p);
 					if (me.getClickCount() == 2) {
-						int id = Integer.parseInt((String) table.getValueAt(row, 2));
-						CancionesLista mostrar = new CancionesLista(id,u);
-						mostrar.setVisible(true);
+						final JDialog loading = new JDialog(frame);
+						JPanel p1 = new JPanel(new BorderLayout());
+						p1.add(new JLabel("Cargando cancion..."), BorderLayout.CENTER);
+						loading.setUndecorated(true);
+						loading.getContentPane().add(p1);
+						loading.pack();
+						loading.setLocationRelativeTo(frame);
+						loading.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+						loading.setModal(true);
+						SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+							@Override
+							protected String doInBackground() throws InterruptedException {
+								// Ejecutamos operacion larga   
+								int id = Integer.parseInt((String) table.getValueAt(row, 4));
+								System.out.println(id);
+								Reproductor.init(id);
+								cancionRepositorio.updateReproducciones(id);
+								return null;
+							}
+							@Override
+							protected void done() {
+								//Cuando acaba, quitamos el mensaje
+								loading.dispose();
+							}
+						};
+						worker.execute();
+						loading.setVisible(true);
+						try {
+							worker.get();
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			});
@@ -168,6 +203,23 @@ public class ListasReproduccion extends JFrame {
 			txtpnReproducciones.setFont(new Font("Tahoma", Font.BOLD, 11));
 			txtpnReproducciones.setBounds(115, 47, 103, 20);
 			panel.add(txtpnReproducciones);
+
+			JTextPane txtpnArtista = new JTextPane();
+			txtpnArtista.setText("Artista");
+			txtpnArtista.setOpaque(false);
+			txtpnArtista.setForeground(Color.BLACK);
+			txtpnArtista.setFont(new Font("Tahoma", Font.BOLD, 11));
+			txtpnArtista.setBounds(230, 47, 103, 20);
+			panel.add(txtpnArtista);
+
+			JTextPane txtpnGenero = new JTextPane();
+			txtpnGenero.setText("Genero");
+			txtpnGenero.setOpaque(false);
+			txtpnGenero.setForeground(Color.BLACK);
+			txtpnGenero.setFont(new Font("Tahoma", Font.BOLD, 11));
+			txtpnGenero.setBounds(328, 47, 103, 20);
+			panel.add(txtpnGenero);
+
 
 			JTextPane txtpnId = new JTextPane();
 			txtpnId.setText("Id");
@@ -183,20 +235,24 @@ public class ListasReproduccion extends JFrame {
 	}
 
 	public void cargarListasMasReproducidas() {
-		try{
-			ArrayList<ListaReproduccion> list = listasRepositorio.findMasReproducciones(u);
+		try {
+			ArrayList<Cancion> list = listasRepositorio.findCanciones(id,u);
 			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 			tableModel.setRowCount(0);
 			for (int i = 0; i < list.size(); i++) {
-				String[] data = new String[3];
-				data[0] = list.get(i).getTitulo();
+				String[] data = new String[5];
+				data[0] = list.get(i).getNombre();
 				data[1] = Integer.toString(list.get(i).getReproducciones());
-				data[2] = Integer.toString(list.get(i).getIdLista());
+				data[2] = list.get(i).getArtista();
+				data[3] = list.get(i).getGenero();
+				data[4] = Integer.toString(list.get(i).getId());
 				tableModel.addRow(data);
 			}
 			table.setModel(tableModel);
 			table.repaint();
-		}catch(CancionException e){}
+		} catch (CancionException e) {
+			
+		}
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
