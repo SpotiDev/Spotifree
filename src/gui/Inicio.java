@@ -67,10 +67,6 @@ public class Inicio extends JFrame {
 	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 	Usuario u;
 
-	//	private String [] columnas ={"titulo","reproducciones","artista","genero"};
-	//	private String [][] datos ={{"aaaa", "bbbb"},
-	//			{"aaaa", "bbbb"}};
-
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 
 	public static void main(String[] args) {
@@ -116,7 +112,7 @@ public class Inicio extends JFrame {
 			}
 		});
 		panel.setLayout(null);
-		
+
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(panel, popupMenu);
 		panel.add(btnRegistro);
@@ -188,10 +184,10 @@ public class Inicio extends JFrame {
 		textField_1.setBounds(92, 302, 162, 20);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
-		
-		
-		
-		final JButton btnListaReproduccion = new JButton("Listas de reproducción");
+
+
+
+		final JButton btnListaReproduccion = new JButton("Listas de reproducciÃ³n");
 		btnListaReproduccion.setBackground(Color.BLACK);
 		btnListaReproduccion.setBounds(77, 278, 141, 47);
 		btnListaReproduccion.setVisible(false);
@@ -202,7 +198,7 @@ public class Inicio extends JFrame {
 				listaReproduccion.setVisible(true);
 			}
 		});
-		
+
 		final JButton btnSubirCancion = new JButton("Subir Cancion");
 		btnSubirCancion.setBackground(Color.BLACK);
 		btnSubirCancion.setBounds(382, 278, 141, 47);
@@ -247,6 +243,7 @@ public class Inicio extends JFrame {
 				}
 			}
 		});
+
 
 		table = new JTable() {
 			public boolean isCellEditable(int nRow, int nCol) {
@@ -330,6 +327,7 @@ public class Inicio extends JFrame {
 			txtpnGenero.setBounds(328, 47, 103, 20);
 			panel.add(txtpnGenero);
 
+
 			JTextPane txtpnId = new JTextPane();
 			txtpnId.setText("Id");
 			txtpnId.setOpaque(false);
@@ -337,13 +335,12 @@ public class Inicio extends JFrame {
 			txtpnId.setFont(new Font("Tahoma", Font.BOLD, 11));
 			txtpnId.setBounds(445, 47, 103, 20);
 			panel.add(txtpnId);
-			
-			JComboBox<String> comboBox = new JComboBox<String>();
+
+			final JComboBox<String> comboBox = new JComboBox<String>();
 			comboBox.addItem("Seleccione un filtro");
 			comboBox.addItem("Mas reproducciones");
-			comboBox.addItem("Ultimas añadidas");
+			comboBox.addItem("Ultimas aÃ±adidas");
 			comboBox.addActionListener(new ActionListener() {
-				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try{
@@ -353,6 +350,8 @@ public class Inicio extends JFrame {
 			});
 			comboBox.setBounds(382, 15, 141, 20);
 			panel.add(comboBox);
+
+
 
 			cargarUltimasCanciones();
 	}
@@ -375,7 +374,7 @@ public class Inicio extends JFrame {
 			table.repaint();
 		} catch(CancionException e) { }
 	}
-	
+
 	public void cargarCancionesMasReproducidas(){
 		try{
 			ArrayList<Cancion> list = cancionRepositorio.findMasReproducciones();
@@ -394,7 +393,7 @@ public class Inicio extends JFrame {
 			table.repaint();
 		}catch(CancionException e){}
 	}
-	
+
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -412,7 +411,7 @@ public class Inicio extends JFrame {
 			}
 		});
 	}
-	
+
 	private void filtra(int num){
 		if(num == 1){
 			cargarCancionesMasReproducidas();
