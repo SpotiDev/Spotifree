@@ -38,7 +38,7 @@ public class ListasRepositorio {
 		if (cursor.iterator().hasNext()) {
 			cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
 					cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
-					cursor.getFileInputStream("archivo"));
+					cursor.getFileInputStream("archivo",-1));
 			System.out.println(cancion.toString());
 		}
 		return cancion;

@@ -80,15 +80,15 @@ public class Cursor implements Iterable<Cursor> {
 		}
 	}
 	
-	public FileInputStream getFileInputStream(String name) {
+	public FileInputStream getFileInputStream(String name, int id) {
 		FileInputStream fileInputStream = null;
 		try {
 			Blob blob = rs.getBlob(name); 
 			byte[] bytes = blob.getBytes(1, (int) blob.length());
-			FileOutputStream fos = new FileOutputStream("download.mp3");
+			FileOutputStream fos = new FileOutputStream("cache/"+id+"_download.mp3");
 			fos.write(bytes);
 			fos.close();
-			return new FileInputStream("download.mp3");
+			return new FileInputStream("cache/"+id+"_download.mp3");
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			System.out.println("SALTA EXCEPCION EN cursor.getFileInputStream 1");

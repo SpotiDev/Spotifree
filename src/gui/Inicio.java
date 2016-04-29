@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
@@ -41,11 +42,14 @@ import modelo.Usuario;
 import modelo.UsuarioException;
 import repositorio.CancionRepositorio;
 import repositorio.UsuarioRepositorio;
-
 import bd.ConexionBD;
 import bd.JDBCTemplate;
+
 import javax.swing.JPopupMenu;
+
 import java.awt.Component;
+import java.io.File;
+
 import javax.swing.JComboBox;
 
 /**
@@ -66,6 +70,8 @@ public class Inicio extends JFrame {
 	boolean logueado = false;
 	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 	Usuario u;
+	
+	public final ArrayList<Integer> cacheId = new ArrayList <>();
 
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
 
@@ -77,6 +83,15 @@ public class Inicio extends JFrame {
 					UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
 					Inicio frame = new Inicio();
 					frame.setVisible(true);
+					frame.addWindowListener(new java.awt.event.WindowAdapter() {
+				        public void windowClosing(WindowEvent winEvt) {
+				        	//Borramos ficheros en cache
+				        	File dir = new File("cache"); 
+				        	for(File file: dir.listFiles()) file.delete();
+				        	System.out.println("HELOO");
+				            System.exit(0);
+				        }
+				    });
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -277,11 +292,18 @@ public class Inicio extends JFrame {
 						SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
 							@Override
 							protected String doInBackground() throws InterruptedException {
-								// Ejecutamos operacion larga   
+								// Ejecutamos operacion larga
 								int id = Integer.parseInt((String) table.getValueAt(row, 4));
-								System.out.println(id);
-								Reproductor.init(id);
-								cancionRepositorio.updateReproducciones(id);
+								if (cacheId.contains(id)){
+									Reproductor.init(id,true);
+									cancionRepositorio.updateReproducciones(id);
+								}
+								else{
+									System.out.println(id);
+									Reproductor.init(id,false);
+									cacheId.add(id);
+									cancionRepositorio.updateReproducciones(id);
+								}
 								return null;
 							}
 							@Override
@@ -420,4 +442,5 @@ public class Inicio extends JFrame {
 			cargarUltimasCanciones();
 		}
 	}
+	
 }

@@ -1,5 +1,8 @@
 package repositorio;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import bd.ConexionBD;
@@ -23,16 +26,35 @@ public class CancionRepositorio {
 				cancion.getReproducciones(), cancion.getDuracion(), cancion.getArchivo());
 	}
 	
-	public Cancion seleccionarCancion(int id) throws CancionException {
-		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion, Archivo FROM Cancion WHERE ID = " + id;
-		Cursor cursor = p.executeQueryAndGetCursor(sql);
+	public Cancion seleccionarCancion(int id, boolean cache) throws CancionException {
 		Cancion cancion = null;
-		if (cursor.iterator().hasNext()) {
-			cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
-					cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
-					cursor.getFileInputStream("archivo"));
-			System.out.println(cancion.toString());
+		if (cache){
+			String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion WHERE ID = " + id;
+			Cursor cursor = p.executeQueryAndGetCursor(sql);
+			if (cursor.iterator().hasNext()) {
+				cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
+						cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
+						null);
+				try {
+					cancion.setArchivo(new FileInputStream(new File("cache/"+id+"_download.mp3")));
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println(cancion.toString());
+			}
 		}
+		else{
+			String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion, Archivo FROM Cancion WHERE ID = " + id;
+			Cursor cursor = p.executeQueryAndGetCursor(sql);
+			if (cursor.iterator().hasNext()) {
+				cancion = new Cancion(cursor.getInteger("id"), cursor.getString("nombre"), cursor.getString("artista"),
+						cursor.getString("genero"), cursor.getInteger("reproducciones"), cursor.getInteger("duracion"),
+						cursor.getFileInputStream("archivo",id));
+				System.out.println(cancion.toString());
+			}
+		}
+
 		return cancion;
 	}
 	

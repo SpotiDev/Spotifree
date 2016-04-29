@@ -53,12 +53,12 @@ public class Reproductor extends JFrame {
 	
 	//private boolean status = false;
 	
-	public static void init(final int id) {
+	public static void init(final int id, boolean cache) {
 
 		// select Look and Feel
         try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-            Reproductor frame = new Reproductor(id);
+            Reproductor frame = new Reproductor(id,cache);
 			frame.setVisible(true);
         } catch (CancionException | ClassNotFoundException
         		| InstantiationException
@@ -69,11 +69,16 @@ public class Reproductor extends JFrame {
 		}
 	}
 	
-	public Reproductor(final int id) throws CancionException {
-		
-		final Cancion c = cancionRepositorio.seleccionarCancion(id);
+	public Reproductor(final int id, final boolean cache) throws CancionException {
+		final Cancion c = cancionRepositorio.seleccionarCancion(id,cache);
 		timeLeft  = c.getDuracion()*1000; //En ms
 		totalTime  = c.getDuracion()*1000; //En ms
+		try {
+			player = new PausablePlayer(c.getArchivo());
+		} catch (JavaLayerException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 		
 		setTitle("Reproductor - Spotifree");
 		
@@ -97,7 +102,7 @@ public class Reproductor extends JFrame {
 		label.setBounds(169, 202, 157, 27);
 		panel.add(label);
 		SimpleDateFormat df=new SimpleDateFormat("mm:ss");
-        label.setText(df.format(totalTime)+" / "+df.format(timeLeft));
+        label.setText(df.format(timeLeft)+" / "+df.format(totalTime));
 
 
 		JTextPane txtTitulo = new JTextPane();
@@ -131,7 +136,7 @@ public class Reproductor extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if (player == null) {
-						Cancion c = cancionRepositorio.seleccionarCancion(id);
+						Cancion c = cancionRepositorio.seleccionarCancion(id,cache);
 			            player = new PausablePlayer(c.getArchivo());
 					}
 					if (player.isNotStarted() || player.isPaused() || player.isFinished()) {
@@ -142,7 +147,7 @@ public class Reproductor extends JFrame {
 						    	  timeLeft -= 100;
 							        SimpleDateFormat df=new SimpleDateFormat("mm:ss");
 							        //c.getDuracion()/60+":"+c.getDuracion()%60 
-							        label.setText(df.format(totalTime)+" / "+df.format(timeLeft));
+							        label.setText(df.format(timeLeft)+" / "+df.format(totalTime));
 							        if(timeLeft<=0)
 							        {
 							            timer.stop();
@@ -186,7 +191,7 @@ public class Reproductor extends JFrame {
 							timer.stop();
 							timeLeft = totalTime;
 					        SimpleDateFormat df=new SimpleDateFormat("mm:ss");
-					        label.setText(df.format(totalTime)+" / "+df.format(timeLeft));
+					        label.setText(df.format(timeLeft)+" / "+df.format(totalTime));
 						}
 					}
 				}

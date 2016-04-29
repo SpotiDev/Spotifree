@@ -117,15 +117,15 @@ public class CancionesLista extends JFrame {
 		btnBuscar.setBounds(232, 14, 103, 23);
 		panel.add(btnBuscar);
 		
-		JButton btnAñadirCancion = new JButton("Añadir Cancion");
-		btnAñadirCancion.setBackground(SystemColor.desktop);		
-		btnAñadirCancion.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnAñadirCancion.setBounds(382, 278, 141, 47);
-		btnAñadirCancion.setOpaque(false);
-		panel.add(btnAñadirCancion);
-		btnAñadirCancion.addActionListener(new ActionListener() {
+		JButton btnAnadirCancion = new JButton("Aï¿½adir Cancion");
+		btnAnadirCancion.setBackground(SystemColor.desktop);		
+		btnAnadirCancion.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAnadirCancion.setBounds(382, 278, 141, 47);
+		btnAnadirCancion.setOpaque(false);
+		panel.add(btnAnadirCancion);
+		btnAnadirCancion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AñadirCancion nueva = new AñadirCancion(id,u);
+				AnadirCancion nueva = new AnadirCancion(id,u);
 				nueva.setVisible(true);
 			}
 		});
@@ -173,7 +173,7 @@ public class CancionesLista extends JFrame {
 								// Ejecutamos operacion larga   
 								int id = Integer.parseInt((String) table.getValueAt(row, 4));
 								System.out.println(id);
-								Reproductor.init(id);
+								Reproductor.init(id,false);
 								cancionRepositorio.updateReproducciones(id);
 								return null;
 							}
