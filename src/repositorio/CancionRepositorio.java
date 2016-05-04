@@ -134,6 +134,19 @@ public class CancionRepositorio {
 		return listaCanciones;
 	}
 	
+	public ArrayList<Integer> findIds () throws CancionException{
+		String sql = "SELECT ID FROM Cancion";
+		Cursor cursor = p.executeQueryAndGetCursor(sql);
+		ArrayList<Integer> listaId = new ArrayList<>();
+		int i = 1; //Max 10 canciones
+		while (cursor.iterator().hasNext() && i < 10){
+			listaId.add(cursor.getInteger("id"));
+			cursor.iterator().next();
+			i++;
+		}
+		return listaId;
+	}
+	
 	public int buscarCancion(String nombre) {
 		String sql = "SELECT * FROM Cancion WHERE nombre = '"+nombre+"'";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
