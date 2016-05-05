@@ -45,6 +45,8 @@ import javax.swing.border.LineBorder;
 
 import modelo.Cancion;
 import modelo.CancionException;
+import modelo.Genero;
+import modelo.GeneroException;
 import modelo.PausablePlayer;
 import modelo.Usuario;
 import modelo.UsuarioException;
@@ -378,8 +380,9 @@ public class Inicio extends JFrame {
 
 			final JComboBox<String> comboBox = new JComboBox<String>();
 			comboBox.addItem("Seleccione un filtro");
-			comboBox.addItem("Mas reproducciones");
-			comboBox.addItem("Ultimas aÃ±adidas");
+			comboBox.addItem("Mas reproducidas");
+			comboBox.addItem("Ultimas añadidas");
+			comboBox.addItem("Generos mas oidos");
 			comboBox.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -461,6 +464,22 @@ public class Inicio extends JFrame {
 			cargarUltimasCanciones();
 	}
 
+	public void cargarGenerosMasReproducidos() {
+		try {
+			ArrayList<Genero> list = cancionRepositorio.findGenerosMasReproducciones();
+			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+			tableModel.setRowCount(0);
+			for (int i = 0; i < list.size(); i++) {
+				String[] data = new String[2];
+				data[0] = list.get(i).getGenero();
+				data[1] = Integer.toString(list.get(i).getReproducciones());
+				tableModel.addRow(data);
+			}
+			table.setModel(tableModel);
+			table.repaint();
+		} catch(GeneroException e) { }
+	}
+	
 	public void cargarUltimasCanciones() {
 		try {
 			ArrayList<Cancion> list = cancionRepositorio.findLastest();
@@ -523,6 +542,9 @@ public class Inicio extends JFrame {
 		}
 		else if(num == 2){
 			cargarUltimasCanciones();
+		}
+		else if (num == 3){
+			cargarGenerosMasReproducidos();
 		}
 	}
 

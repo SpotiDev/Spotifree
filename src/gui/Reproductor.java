@@ -75,7 +75,7 @@ public class Reproductor extends JFrame {
 	}
 
 	public Reproductor(final int id, final boolean cache) throws CancionException {
-		final Cancion c = cancionRepositorio.seleccionarCancion(id,cache);
+		final Cancion c = cancionRepositorio.seleccionarCancion(id, cache);
 		timeLeft  = c.getDuracion()*1000; //En ms
 		totalTime  = c.getDuracion()*1000; //En ms
 		try {
@@ -141,12 +141,12 @@ public class Reproductor extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if (player == null) {
-						Cancion c = cancionRepositorio.seleccionarCancion(id,cache);
+						Cancion c = cancionRepositorio.seleccionarCancion(id, cache);
 						player = new PausablePlayer(c.getArchivo());
 					}
 					if (player.isNotStarted() || player.isPaused() || player.isFinished()) {
 						player.play();
-						timer = new Timer (100,new ActionListener() {
+						timer = new Timer (100, new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								timeLeft -= 100;
@@ -427,7 +427,7 @@ public class Reproductor extends JFrame {
 						//Y salimos
 						frame.dispose();
 
-						//Pasamos cancion atr√°s
+						//Pasamos cancion atr·s
 						int indexActual = Inicio.listaId.indexOf(c.getId());
 						System.out.println("Index actual: "+ indexActual);
 						System.out.println("Id Cancion Actual: "+ Inicio.listaId.get(indexActual));

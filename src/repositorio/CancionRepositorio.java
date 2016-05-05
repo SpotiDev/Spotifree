@@ -10,6 +10,8 @@ import bd.Cursor;
 import bd.JDBCTemplate;
 import modelo.Cancion;
 import modelo.CancionException;
+import modelo.Genero;
+import modelo.GeneroException;
 
 public class CancionRepositorio {
 
@@ -58,26 +60,26 @@ public class CancionRepositorio {
 		return cancion;
 	}
 	
-	public int findReproducciones(int id) {
-		String sql = "SELECT Reproducciones FROM Cancion WHERE ID = " + id;
+	public void updateReproducciones (int id) {
+		String sql = "UPDATE Cancion SET Reproducciones = Reproducciones + 1 WHERE ID = " + id;
+		p.executeSentence(sql);
+	}
+	
+	public ArrayList<Genero> findGenerosMasReproducciones() throws GeneroException {
+		String sql = "SELECT Genero, SUM(Reproducciones) AS Reproducciones FROM Cancion GROUP BY Genero ORDER BY Reproducciones DESC";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
-		int repros = -1;
-		if (cursor.iterator().hasNext()) {
-			repros = cursor.getInteger("reproducciones");	
+		ArrayList<Genero> listaGeneros = new ArrayList<>();
+		int i = 1; //Max 10 generos
+		while (cursor.iterator().hasNext() && i < 10){
+			Genero genero = new Genero(cursor.getString("genero"), cursor.getInteger("reproducciones"));
+			cursor.iterator().next();
+			listaGeneros.add(genero);
+			System.out.println(genero.toString());
+			i++;
 		}
-		return repros;
+		System.out.println("Acabo de listar géneros");
+		return listaGeneros;
 	}
-	
-	public void updateReproducciones (int id){
-//		String sql = "UPDATE Cancion SET Reproducciones = " + String.valueOf(findReproducciones(id)) + " WHERE ID = " + id;
-//		p.executeQuery(sql);
-	}
-	
-//	public int findMaxId() {
-//		String sql = "SELECT MAX(ID) AS Maxid FROM Cancion";
-//		Cursor cursor = p.executeQueryAndGetCursor(sql);
-//		return cursor.getInteger("Maxid");
-//	}
 	
 	public ArrayList<Cancion> findCanciones (String busqueda) throws CancionException {
 		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion FROM Cancion WHERE Cancion.Nombre LIKE '%"+busqueda+"%'" + "OR Cancion.Artista LIKE '%"+busqueda+"%'" + "OR Cancion.Genero LIKE '%"+busqueda+"%'";
