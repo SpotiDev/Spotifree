@@ -318,12 +318,18 @@ public class Inicio extends JFrame {
 									if (cacheId.contains(id)){
 										Reproductor.init(id,true);
 										cancionRepositorio.updateReproducciones(id);
+										if (u != null) {
+											cancionRepositorio.updateRecomendacion(id, u.getCorreo());
+										}
 									}
 									else{
 										System.out.println(id);
 										Reproductor.init(id,false);
 										cacheId.add(id);
 										cancionRepositorio.updateReproducciones(id);
+										if (u != null) {
+											cancionRepositorio.updateRecomendacion(id, u.getCorreo());
+										}
 									}
 								} catch (NumberFormatException e) {}
 								return null;
@@ -385,6 +391,7 @@ public class Inicio extends JFrame {
 			comboBox.addItem("M\u00E1s reproducidas");
 			comboBox.addItem("\u00DAltimas a\u00F1adidas");
 			comboBox.addItem("G\u00E9neros m\u00E1s o\u00EDdos");
+			comboBox.addItem("Recomendaciones");
 			comboBox.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -436,12 +443,18 @@ public class Inicio extends JFrame {
 							if (cacheId.contains(id)){
 								Reproductor.init(id,true);
 								cancionRepositorio.updateReproducciones(id);
+								if (u != null) {
+									cancionRepositorio.updateRecomendacion(id, u.getCorreo());
+								}
 							}
 							else{
 								System.out.println(id);
 								Reproductor.init(id,false);
 								cacheId.add(id);
 								cancionRepositorio.updateReproducciones(id);
+								if (u != null) {
+									cancionRepositorio.updateRecomendacion(id, u.getCorreo());
+								}
 							}
 							return null;
 						}
@@ -480,6 +493,25 @@ public class Inicio extends JFrame {
 			table.setModel(tableModel);
 			table.repaint();
 		} catch(GeneroException e) { }
+	}
+	
+	public void cargarRecomendaciones() {
+		try {
+			ArrayList<Cancion> list = cancionRepositorio.findRecomendaciones(u.getCorreo());
+			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+			tableModel.setRowCount(0);
+			for (int i = 0; i < list.size(); i++) {
+				String[] data = new String[5];
+				data[0] = list.get(i).getNombre();
+				data[1] = Integer.toString(list.get(i).getReproducciones());
+				data[2] = list.get(i).getArtista();
+				data[3] = list.get(i).getGenero();
+				data[4] = Integer.toString(list.get(i).getId());
+				tableModel.addRow(data);
+			}
+			table.setModel(tableModel);
+			table.repaint();
+		} catch(CancionException e) { }
 	}
 	
 	public void cargarUltimasCanciones() {
@@ -547,6 +579,11 @@ public class Inicio extends JFrame {
 		}
 		else if (num == 3){
 			cargarGenerosMasReproducidos();
+		}
+		else if (num == 4){
+			if (u != null) {
+				cargarRecomendaciones();
+			}
 		}
 	}
 

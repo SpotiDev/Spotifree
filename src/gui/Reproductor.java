@@ -469,9 +469,6 @@ public class Reproductor extends JFrame {
 		buttonForward.setBounds(400, 135, 55, 55);
 		panel.add(buttonForward);
 
-
-
-
 		btnDescargarCancion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int returnVal = fc.showOpenDialog(Reproductor.this);
