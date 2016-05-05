@@ -222,7 +222,7 @@ public class Inicio extends JFrame {
 
 
 
-		final JButton btnListaReproduccion = new JButton("Listas de reproducciÃ³n");
+		final JButton btnListaReproduccion = new JButton("Listas de reproducci\u00F3n");
 		btnListaReproduccion.setBackground(Color.BLACK);
 		btnListaReproduccion.setBounds(77, 301, 141, 47);
 		btnListaReproduccion.setVisible(false);
@@ -234,7 +234,7 @@ public class Inicio extends JFrame {
 			}
 		});
 
-		final JButton btnSubirCancion = new JButton("Subir Cancion");
+		final JButton btnSubirCancion = new JButton("Subir Canci\u00F3n");
 		btnSubirCancion.setBackground(Color.BLACK);
 		btnSubirCancion.setBounds(382, 301, 141, 47);
 		btnSubirCancion.setVisible(false);
@@ -302,7 +302,7 @@ public class Inicio extends JFrame {
 					if (me.getClickCount() == 2) {
 						final JDialog loading = new JDialog(frame);
 						JPanel p1 = new JPanel(new BorderLayout());
-						p1.add(new JLabel("Cargando cancion..."), BorderLayout.CENTER);
+						p1.add(new JLabel("Cargando canci\u00F3n..."), BorderLayout.CENTER);
 						loading.setUndecorated(true);
 						loading.getContentPane().add(p1);
 						loading.pack();
@@ -313,17 +313,19 @@ public class Inicio extends JFrame {
 							@Override
 							protected String doInBackground() throws InterruptedException {
 								// Ejecutamos operacion larga
-								int id = Integer.parseInt((String) table.getValueAt(row, 4));
-								if (cacheId.contains(id)){
-									Reproductor.init(id,true);
-									cancionRepositorio.updateReproducciones(id);
-								}
-								else{
-									System.out.println(id);
-									Reproductor.init(id,false);
-									cacheId.add(id);
-									cancionRepositorio.updateReproducciones(id);
-								}
+								try {
+									int id = Integer.parseInt((String) table.getValueAt(row, 4));
+									if (cacheId.contains(id)){
+										Reproductor.init(id,true);
+										cancionRepositorio.updateReproducciones(id);
+									}
+									else{
+										System.out.println(id);
+										Reproductor.init(id,false);
+										cacheId.add(id);
+										cancionRepositorio.updateReproducciones(id);
+									}
+								} catch (NumberFormatException e) {}
 								return null;
 							}
 							@Override
@@ -380,9 +382,9 @@ public class Inicio extends JFrame {
 
 			final JComboBox<String> comboBox = new JComboBox<String>();
 			comboBox.addItem("Seleccione un filtro");
-			comboBox.addItem("Mas reproducidas");
-			comboBox.addItem("Ultimas añadidas");
-			comboBox.addItem("Generos mas oidos");
+			comboBox.addItem("M\u00E1s reproducidas");
+			comboBox.addItem("\u00DAltimas a\u00F1adidas");
+			comboBox.addItem("G\u00E9neros m\u00E1s o\u00EDdos");
 			comboBox.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -416,7 +418,7 @@ public class Inicio extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					final JDialog loading = new JDialog(frame);
 					JPanel p1 = new JPanel(new BorderLayout());
-					p1.add(new JLabel("Cargando cancion aleatoria..."), BorderLayout.CENTER);
+					p1.add(new JLabel("Cargando canci\u00F3n aleatoria..."), BorderLayout.CENTER);
 					loading.setUndecorated(true);
 					loading.getContentPane().add(p1);
 					loading.pack();
@@ -470,8 +472,8 @@ public class Inicio extends JFrame {
 			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 			tableModel.setRowCount(0);
 			for (int i = 0; i < list.size(); i++) {
-				String[] data = new String[2];
-				data[0] = list.get(i).getGenero();
+				String[] data = new String[5];
+				data[3] = list.get(i).getGenero();
 				data[1] = Integer.toString(list.get(i).getReproducciones());
 				tableModel.addRow(data);
 			}

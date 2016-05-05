@@ -51,7 +51,7 @@ public class AnadirCancion extends JFrame{
 		txtNombreArtistico.setFont(new Font("Tahoma", Font.BOLD, 11));
 		txtNombreArtistico.setBounds(19, 50, 107, 20);
 		txtNombreArtistico.setEditable(false);
-		txtNombreArtistico.setText("Introduce Nombre de la canción: ");
+		txtNombreArtistico.setText("Introduce Nombre de la canci\u00F3n: ");
 		txtNombreArtistico.setOpaque(false);
 		panel.add(txtNombreArtistico);
 		
@@ -60,7 +60,7 @@ public class AnadirCancion extends JFrame{
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnTerminar = new JButton("Añadir Canción");
+		JButton btnTerminar = new JButton("A\u00F1adir Canci\u00F3n");
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idCancion = cancionRepositorio.buscarCancion(textField.getText());
