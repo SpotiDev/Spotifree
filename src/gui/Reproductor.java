@@ -238,7 +238,7 @@ public class Reproductor extends JFrame {
 		txtpnAsd.setForeground(Color.BLACK);
 		txtpnAsd.setFont(new Font("Tahoma", Font.BOLD, 11));
 		txtpnAsd.setEditable(false);
-		txtpnAsd.setBounds(97, 18, 64, 20);
+		txtpnAsd.setBounds(97, 18, 329, 20);
 		panel.add(txtpnAsd);
 
 		JTextPane txtpnAsd_1 = new JTextPane();
@@ -247,7 +247,7 @@ public class Reproductor extends JFrame {
 		txtpnAsd_1.setForeground(Color.BLACK);
 		txtpnAsd_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		txtpnAsd_1.setEditable(false);
-		txtpnAsd_1.setBounds(97, 58, 64, 20);
+		txtpnAsd_1.setBounds(97, 58, 329, 20);
 		panel.add(txtpnAsd_1);
 
 		JTextPane txtpnAsd_2 = new JTextPane();
@@ -256,7 +256,7 @@ public class Reproductor extends JFrame {
 		txtpnAsd_2.setForeground(Color.BLACK);
 		txtpnAsd_2.setFont(new Font("Tahoma", Font.BOLD, 11));
 		txtpnAsd_2.setEditable(false);
-		txtpnAsd_2.setBounds(97, 103, 64, 20);
+		txtpnAsd_2.setBounds(97, 103, 329, 20);
 		panel.add(txtpnAsd_2);
 
 		//File Chooser

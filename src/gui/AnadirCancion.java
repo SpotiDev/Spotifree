@@ -49,14 +49,14 @@ public class AnadirCancion extends JFrame{
 		JTextPane txtNombreArtistico = new JTextPane();
 		txtNombreArtistico.setForeground(Color.BLACK);
 		txtNombreArtistico.setFont(new Font("Tahoma", Font.BOLD, 11));
-		txtNombreArtistico.setBounds(19, 50, 107, 20);
+		txtNombreArtistico.setBounds(10, 19, 107, 48);
 		txtNombreArtistico.setEditable(false);
 		txtNombreArtistico.setText("Introduce Nombre de la canci\u00F3n: ");
 		txtNombreArtistico.setOpaque(false);
 		panel.add(txtNombreArtistico);
 		
 		textField = new JTextField();
-		textField.setBounds(129, 19, 188, 20);
+		textField.setBounds(129, 47, 188, 20);
 		panel.add(textField);
 		textField.setColumns(10);
 		

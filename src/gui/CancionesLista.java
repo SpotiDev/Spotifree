@@ -117,7 +117,7 @@ public class CancionesLista extends JFrame {
 		btnBuscar.setBounds(232, 14, 103, 23);
 		panel.add(btnBuscar);
 		
-		JButton btnAnadirCancion = new JButton("A�adir Cancion");
+		JButton btnAnadirCancion = new JButton("A\u00F1adir Canci\u00F3n");
 		btnAnadirCancion.setBackground(SystemColor.desktop);		
 		btnAnadirCancion.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnAnadirCancion.setBounds(382, 278, 141, 47);

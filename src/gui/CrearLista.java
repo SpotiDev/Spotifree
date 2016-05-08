@@ -48,7 +48,7 @@ public class CrearLista extends JFrame{
 		JTextPane txtNombreArtistico = new JTextPane();
 		txtNombreArtistico.setForeground(Color.BLACK);
 		txtNombreArtistico.setFont(new Font("Tahoma", Font.BOLD, 11));
-		txtNombreArtistico.setBounds(19, 50, 107, 20);
+		txtNombreArtistico.setBounds(12, 19, 107, 20);
 		txtNombreArtistico.setEditable(false);
 		txtNombreArtistico.setText("Título: ");
 		txtNombreArtistico.setOpaque(false);
