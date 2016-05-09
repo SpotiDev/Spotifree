@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import bd.ConexionBD;
@@ -28,7 +30,7 @@ public class testListaReproduccion {
 	private Usuario u;
 
 	@Test
-	public void testcrearListaReproduccion() throws UsuarioException {
+	public void testCrearListaReproduccion() throws UsuarioException {
 		p = ConexionBD.conectar();
 		String pass = "123456";
 		String user = p.executeQueryBuscar("SELECT Correo FROM Usuario WHERE Usuario.Contrasena = '" + pass + "'");
@@ -50,8 +52,10 @@ public class testListaReproduccion {
 		String user = p.executeQueryBuscar("SELECT Correo FROM Usuario WHERE Usuario.Contrasena = '" + pass + "'");
 		u = usuarioRepositorio.seleccionarUsuario(user);
 		
-		String sql = "DELETE FROM ListaReproduccion WHERE ListaReproduccion.Titulo LIKE 'listaPrueba'";
+		String sql = "DELETE FROM ListaReproduccion WHERE ListaReproduccion.Titulo = 'listaPrueba'";
 		p.executeSentence(sql);
+		int borrado = p.executeQueryCount("SELECT COUNT(*) FROM ListaReproduccion WHERE ListaReproduccion.Titulo = 'listaPrueba'");
+		assertEquals(borrado, 0);
 	}
 	
 	/**
@@ -66,8 +70,9 @@ public class testListaReproduccion {
 		u = usuarioRepositorio.seleccionarUsuario(user);
 	
 		int idCancion = cancionRepositorio.buscarCancion("titulo");
-		listaRepositorio.subirCancionLista(idCancion,2);
-		
+		int numListas = p.executeQueryCount("SELECT COUNT(*) FROM ListaReproduccion,ListaCancion WHERE ListaCancion.idLista = ListaReproduccion.id");
+		listaRepositorio.subirCancionLista(idCancion,listaRepositorio.getIdLista("listaPrueba",u));
+		int numListas2 = p.executeQueryCount("SELECT COUNT(*) FROM ListaReproduccion,ListaCancion WHERE ListaCancion.idLista = ListaReproduccion.id");
+		assertEquals(numListas, numListas2-1);
 	}
-
 }

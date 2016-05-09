@@ -18,10 +18,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+import correo.SwingEmailSender;
 import javazoom.jl.decoder.JavaLayerException;
 import modelo.Cancion;
 import modelo.CancionException;
 import modelo.PausablePlayer;
+import modelo.Usuario;
 import repositorio.CancionRepositorio;
 
 import javax.swing.JButton;
@@ -53,17 +55,18 @@ public class Reproductor extends JFrame {
 	int timeLeft;
 	int totalTime;
 	Timer timer = null;
+	Usuario u;
+	int id;
 
 	static Reproductor frame;
 
 	//private boolean status = false;
 
-	public static void init(final int id, boolean cache) {
-
+	public static void init(final int id, boolean cache, Usuario u) {
 		// select Look and Feel
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-			frame = new Reproductor(id,cache);
+			frame = new Reproductor(id,cache,u);
 			frame.setVisible(true);
 		} catch (CancionException | ClassNotFoundException
 				| InstantiationException
@@ -74,7 +77,9 @@ public class Reproductor extends JFrame {
 		}
 	}
 
-	public Reproductor(final int id, final boolean cache) throws CancionException {
+	public Reproductor(final int id, final boolean cache, Usuario u) throws CancionException {
+		this.u = u;
+		this.id = id;
 		final Cancion c = cancionRepositorio.seleccionarCancion(id, cache);
 		timeLeft  = c.getDuracion()*1000; //En ms
 		totalTime  = c.getDuracion()*1000; //En ms
@@ -227,6 +232,23 @@ public class Reproductor extends JFrame {
 		JButton button_1 = new JButton("Recomendar a un amigo");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				SwingEmailSender correo;
+				Cancion cancion;
+				String mensaje = "";
+				try {
+					cancion = cancionRepositorio.seleccionarCancion(id,false);
+					mensaje = "Hola, prueba esta canción que acabo de escuchar y te gustará: \n"
+							+ ""+cancion.getNombre()+" del Artista "+cancion.getArtista();
+				} catch (CancionException e1) {
+					e1.printStackTrace();
+				}
+				if (u!=null) {
+					correo = new SwingEmailSender(u.getCorreo(),"rellenar",mensaje);	
+				}
+				else {
+					correo = new SwingEmailSender("","",mensaje);
+				}
+				correo.setVisible(true);
 			}
 		});
 		button_1.setBounds(109, 241, 277, 39);
@@ -326,11 +348,11 @@ public class Reproductor extends JFrame {
 						}
 						System.out.println("Id Cancion Siguiente: "+ idCancionSiguiente);
 						if (Inicio.cacheId.contains(idCancionSiguiente)){
-							Reproductor.init(idCancionSiguiente,true);
+							Reproductor.init(idCancionSiguiente,true,u);
 							cancionRepositorio.updateReproducciones(id);
 						}
 						else{
-							Reproductor.init(idCancionSiguiente,false);
+							Reproductor.init(idCancionSiguiente,false,u);
 							Inicio.cacheId.add(idCancionSiguiente);
 							cancionRepositorio.updateReproducciones(idCancionSiguiente);
 						}
@@ -441,11 +463,11 @@ public class Reproductor extends JFrame {
 						}
 						System.out.println("Id Cancion Siguiente: "+ idCancionSiguiente);
 						if (Inicio.cacheId.contains(idCancionSiguiente)){
-							Reproductor.init(idCancionSiguiente,true);
+							Reproductor.init(idCancionSiguiente,true,u);
 							cancionRepositorio.updateReproducciones(id);
 						}
 						else{
-							Reproductor.init(idCancionSiguiente,false);
+							Reproductor.init(idCancionSiguiente,false,u);
 							Inicio.cacheId.add(idCancionSiguiente);
 							cancionRepositorio.updateReproducciones(idCancionSiguiente);
 						}

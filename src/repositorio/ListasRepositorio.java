@@ -11,25 +11,25 @@ import modelo.ListaReproduccion;
 import modelo.Usuario;
 
 public class ListasRepositorio {
-	
+
 	private JDBCTemplate p;
-	
+
 	public ListasRepositorio() {
 		p = ConexionBD.conectar();
 	}
-	
+
 	public void crearLista(ListaReproduccion lista) {
 		String sql = "INSERT INTO ListaReproduccion (usuario, Titulo, Reproducciones)"
 				+ " VALUES (?, ?, ?)";
 		p.executeSentence(sql, lista.getUsuario(), lista.getTitulo(), lista.getReproducciones());
 	}
-	
+
 	public void subirCancionLista(int idCancion, int idLista) {
 		String sql = "INSERT INTO ListaCancion (cancion, idLista)"
 				+ " VALUES (?, ?)";
 		p.executeSentence(sql, idCancion, idLista);
 	}
-	
+
 	public Cancion seleccionarLista(int id) throws CancionException {
 		String sql = "SELECT ID, Nombre, Artista, Genero, Reproducciones, Duracion, Archivo FROM Cancion,ListaReproduccion,ListaCancion"
 				+ " WHERE ListaReproduccion.id = '"+id+"' and ListaReproduccion.idLista = Cancion.ID";
@@ -43,7 +43,7 @@ public class ListasRepositorio {
 		}
 		return cancion;
 	}
-	
+
 	public int findReproducciones(int id) {
 		String sql = "SELECT Reproducciones FROM ListaReproduccion WHERE ID = " + id;
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
@@ -53,24 +53,24 @@ public class ListasRepositorio {
 		}
 		return repros;
 	}
-	
+
 	public void updateReproducciones (int id){
-//		String sql = "UPDATE Cancion SET Reproducciones = " + String.valueOf(findReproducciones(id)) + " WHERE ID = " + id;
-//		p.executeQuery(sql);
+		//		String sql = "UPDATE Cancion SET Reproducciones = " + String.valueOf(findReproducciones(id)) + " WHERE ID = " + id;
+		//		p.executeQuery(sql);
 	}
-	
-//	public int findMaxId() {
-//		String sql = "SELECT MAX(ID) AS Maxid FROM Cancion";
-//		Cursor cursor = p.executeQueryAndGetCursor(sql);
-//		return cursor.getInteger("Maxid");
-//	}
-	
+
+	//	public int findMaxId() {
+	//		String sql = "SELECT MAX(ID) AS Maxid FROM Cancion";
+	//		Cursor cursor = p.executeQueryAndGetCursor(sql);
+	//		return cursor.getInteger("Maxid");
+	//	}
+
 	public ArrayList<Cancion> findCanciones (int id, Usuario u) throws CancionException {
 		String sql = "SELECT Cancion.ID, Nombre, Artista, Genero, Cancion.Reproducciones,"
 				+ " Duracion, Archivo FROM Cancion,ListaReproduccion,ListaCancion"
 				+ " WHERE ListaReproduccion.id = '"+id+"' and "
-						+ "ListaReproduccion.id = ListaCancion.idLista "
-						+ "and ListaReproduccion.usuario = '"+u.getCorreo()+"' and ListaCancion.cancion = Cancion.ID ORDER BY Cancion.ID DESC";
+				+ "ListaReproduccion.id = ListaCancion.idLista "
+				+ "and ListaReproduccion.usuario = '"+u.getCorreo()+"' and ListaCancion.cancion = Cancion.ID ORDER BY Cancion.ID DESC";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
 		ArrayList<Cancion> listaCanciones = new ArrayList<>();
 		int i = 1; //Max 10 canciones
@@ -86,7 +86,7 @@ public class ListasRepositorio {
 		System.out.println("Acabo de listar");
 		return listaCanciones;
 	}
-	
+
 	public ArrayList<ListaReproduccion> findMasReproducciones(Usuario u) throws CancionException{
 		String sql = "SELECT id, Titulo, Reproducciones FROM ListaReproduccion WHERE usuario = '"+u.getCorreo()+"' ORDER BY Reproducciones DESC";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
@@ -102,5 +102,15 @@ public class ListasRepositorio {
 		}
 		System.out.println("Acabo de listar");
 		return listasReproduccion;
+	}
+
+	public int getIdLista(String titulo, Usuario u) {
+		String sql = "SELECT * FROM ListaReproduccion WHERE usuario = '"+u.getCorreo()+"' AND titulo='"+titulo+"'";
+		Cursor cursor = p.executeQueryAndGetCursor(sql);
+		int idLista = -1;
+		if (cursor.iterator().hasNext()) {
+			idLista = cursor.getInteger("id");
+		}
+		return idLista;
 	}
 }

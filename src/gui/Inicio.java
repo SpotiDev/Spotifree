@@ -316,7 +316,7 @@ public class Inicio extends JFrame {
 								try {
 									int id = Integer.parseInt((String) table.getValueAt(row, 4));
 									if (cacheId.contains(id)){
-										Reproductor.init(id,true);
+										Reproductor.init(id,true,u);
 										cancionRepositorio.updateReproducciones(id);
 										if (u != null) {
 											cancionRepositorio.updateRecomendacion(id, u.getCorreo());
@@ -324,7 +324,7 @@ public class Inicio extends JFrame {
 									}
 									else{
 										System.out.println(id);
-										Reproductor.init(id,false);
+										Reproductor.init(id,false,u);
 										cacheId.add(id);
 										cancionRepositorio.updateReproducciones(id);
 										if (u != null) {
@@ -441,7 +441,7 @@ public class Inicio extends JFrame {
 							int id = listaId.get(r.nextInt(listaId.size()));
 							System.out.println("Random id: " + id);
 							if (cacheId.contains(id)){
-								Reproductor.init(id,true);
+								Reproductor.init(id,true,u);
 								cancionRepositorio.updateReproducciones(id);
 								if (u != null) {
 									cancionRepositorio.updateRecomendacion(id, u.getCorreo());
@@ -449,7 +449,7 @@ public class Inicio extends JFrame {
 							}
 							else{
 								System.out.println(id);
-								Reproductor.init(id,false);
+								Reproductor.init(id,false,u);
 								cacheId.add(id);
 								cancionRepositorio.updateReproducciones(id);
 								if (u != null) {

@@ -173,7 +173,7 @@ public class CancionesLista extends JFrame {
 								// Ejecutamos operacion larga   
 								int id = Integer.parseInt((String) table.getValueAt(row, 4));
 								System.out.println(id);
-								Reproductor.init(id,false);
+								Reproductor.init(id,false,u);
 								cancionRepositorio.updateReproducciones(id);
 								return null;
 							}
