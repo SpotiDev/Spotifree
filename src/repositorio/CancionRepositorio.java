@@ -220,8 +220,11 @@ public class CancionRepositorio {
 	}
 	
 	public int buscarCancion(String nombre) {
-		String sql = "SELECT * FROM Cancion WHERE nombre = '"+nombre+"'";
+		String sql = "SELECT ID FROM Cancion WHERE nombre LIKE '"+nombre+"'";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);
-		return cursor.getInteger("ID");
+		if (cursor.iterator().hasNext()) {
+			return cursor.getInteger("id");	
+		}
+		return -1;
 	}
 }

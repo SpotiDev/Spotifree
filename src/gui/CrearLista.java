@@ -5,15 +5,19 @@ import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
+import modelo.CancionException;
 import modelo.ListaReproduccion;
 import modelo.Usuario;
 import repositorio.ListasRepositorio;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
@@ -23,11 +27,13 @@ public class CrearLista extends JFrame{
 	
 	private JPanel contentPane;
 	private JTextField textField;
-	private ListasRepositorio listaRepositorio = new ListasRepositorio();
+	private ListasRepositorio listasRepositorio = new ListasRepositorio();
+	Usuario u;
+	JTable table;
 	
-	
-	public CrearLista(final Usuario u) {
-		
+	public CrearLista(final Usuario u, final JTable table) {
+		this.u = u;
+		this.table = table;
 		setTitle("Spotifree");
 		
 		setResizable(false);
@@ -63,12 +69,33 @@ public class CrearLista extends JFrame{
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListaReproduccion lr = new ListaReproduccion(0, u.getCorreo(), 0, textField.getText());
-				listaRepositorio.crearLista(lr);
+				listasRepositorio.crearLista(lr);
+				actualizarListas();
 			}
 		});
 		btnTerminar.setBounds(195, 175, 122, 23);
 		panel.add(btnTerminar);
 		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
+	}
+	
+
+	private void actualizarListas() {
+		try{
+			ArrayList<ListaReproduccion> list = listasRepositorio.findMasReproducciones(u);
+			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+			tableModel.setRowCount(0);
+			for (int i = 0; i < list.size(); i++) {
+				String[] data = new String[3];
+				data[0] = list.get(i).getTitulo();
+				data[1] = Integer.toString(list.get(i).getReproducciones());
+				data[2] = Integer.toString(list.get(i).getIdLista());
+				tableModel.addRow(data);
+			}
+			table.setModel(tableModel);
+			table.repaint();
+		}catch(CancionException e){
+			System.out.println("Error al cargar listas de reproducción");
+		}
 	}
 }

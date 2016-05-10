@@ -92,7 +92,7 @@ public class ListasReproduccion extends JFrame {
 		panel.add(btnCrearLista);
 		btnCrearLista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CrearLista crear = new CrearLista(u);
+				CrearLista crear = new CrearLista(u,table);
 				crear.setVisible(true);
 			}
 		});
@@ -196,7 +196,9 @@ public class ListasReproduccion extends JFrame {
 			}
 			table.setModel(tableModel);
 			table.repaint();
-		}catch(CancionException e){}
+		}catch(CancionException e){
+			System.out.println("Error al cargar listas de reproducción");
+		}
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {

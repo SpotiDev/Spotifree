@@ -116,7 +116,7 @@ public class CancionesLista extends JFrame {
 		});
 		btnBuscar.setBounds(232, 14, 103, 23);
 		panel.add(btnBuscar);
-		
+
 		JButton btnAnadirCancion = new JButton("A\u00F1adir Canci\u00F3n");
 		btnAnadirCancion.setBackground(SystemColor.desktop);		
 		btnAnadirCancion.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -125,7 +125,7 @@ public class CancionesLista extends JFrame {
 		panel.add(btnAnadirCancion);
 		btnAnadirCancion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AnadirCancion nueva = new AnadirCancion(id,u);
+				AnadirCancion nueva = new AnadirCancion(id,u,table);
 				nueva.setVisible(true);
 			}
 		});
@@ -230,7 +230,7 @@ public class CancionesLista extends JFrame {
 			panel.add(txtpnId);
 
 			cargarListasMasReproducidas();
-			
+
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
@@ -251,9 +251,11 @@ public class CancionesLista extends JFrame {
 			table.setModel(tableModel);
 			table.repaint();
 		} catch (CancionException e) {
-			
+			System.out.println("Error al cargar canciones de la lista");
 		}
 	}
+
+	
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {

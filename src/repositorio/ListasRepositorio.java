@@ -27,7 +27,9 @@ public class ListasRepositorio {
 	public void subirCancionLista(int idCancion, int idLista) {
 		String sql = "INSERT INTO ListaCancion (cancion, idLista)"
 				+ " VALUES (?, ?)";
-		p.executeSentence(sql, idCancion, idLista);
+		if (idCancion>-1) {
+			p.executeSentence(sql, idCancion, idLista);	
+		}
 	}
 
 	public Cancion seleccionarLista(int id) throws CancionException {

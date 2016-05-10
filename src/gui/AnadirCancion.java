@@ -5,15 +5,20 @@ import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
+import modelo.Cancion;
+import modelo.CancionException;
 import modelo.Usuario;
 import repositorio.CancionRepositorio;
 import repositorio.ListasRepositorio;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
@@ -23,12 +28,17 @@ public class AnadirCancion extends JFrame{
 	
 	private JPanel contentPane;
 	private JTextField textField;
-	private ListasRepositorio listaRepositorio = new ListasRepositorio();
+	private ListasRepositorio listasRepositorio = new ListasRepositorio();
 	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
+	JTable table;
+	int idLista;
+	Usuario u;
 	
 	
-	public AnadirCancion(final int idLista, final Usuario u) {
-		
+	public AnadirCancion(final int idLista, final Usuario u, JTable table) {
+		this.idLista = idLista;
+		this.u = u;
+		this.table = table;
 		setTitle("Spotifree");
 		
 		setResizable(false);
@@ -64,12 +74,35 @@ public class AnadirCancion extends JFrame{
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idCancion = cancionRepositorio.buscarCancion(textField.getText());
-				listaRepositorio.subirCancionLista(idCancion,idLista);
+				listasRepositorio.subirCancionLista(idCancion,idLista);
+				actualizarCanciones();
 			}
 		});
 		btnTerminar.setBounds(195, 175, 122, 23);
 		panel.add(btnTerminar);
+		setVisible(false);
 		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
+	}
+	
+	private void actualizarCanciones() {
+		try {
+			ArrayList<Cancion> list = listasRepositorio.findCanciones(idLista,u);
+			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+			tableModel.setRowCount(0);
+			for (int i = 0; i < list.size(); i++) {
+				String[] data = new String[5];
+				data[0] = list.get(i).getNombre();
+				data[1] = Integer.toString(list.get(i).getReproducciones());
+				data[2] = list.get(i).getArtista();
+				data[3] = list.get(i).getGenero();
+				data[4] = Integer.toString(list.get(i).getId());
+				tableModel.addRow(data);
+			}
+			table.setModel(tableModel);
+			table.repaint();
+		} catch (CancionException e) {
+			System.out.println("Error al cargar canciones de la lista");
+		}
 	}
 }
