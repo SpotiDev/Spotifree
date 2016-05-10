@@ -53,7 +53,7 @@ public class SubirCancion extends JFrame{
 	//Archvio para guardar el Fichero seleccionado
 	File file;
 
-	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
+	private CancionRepositorio cancionRepositorio = new CancionRepositorio(Inicio.p);
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

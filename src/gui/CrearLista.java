@@ -27,7 +27,7 @@ public class CrearLista extends JFrame{
 	
 	private JPanel contentPane;
 	private JTextField textField;
-	private ListasRepositorio listasRepositorio = new ListasRepositorio();
+	private ListasRepositorio listasRepositorio = new ListasRepositorio(Inicio.p);
 	Usuario u;
 	JTable table;
 	

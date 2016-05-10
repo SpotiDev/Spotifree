@@ -53,8 +53,8 @@ public class ListasReproduccion extends JFrame {
 	boolean logueado = false;
 	Usuario u;
 
-	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
-	private ListasRepositorio listasRepositorio = new ListasRepositorio();
+	private CancionRepositorio cancionRepositorio = new CancionRepositorio(Inicio.p);
+	private ListasRepositorio listasRepositorio = new ListasRepositorio(Inicio.p);
 
 	public ListasReproduccion(final Usuario u) {
 		this.u = u;

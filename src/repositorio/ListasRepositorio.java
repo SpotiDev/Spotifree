@@ -18,6 +18,10 @@ public class ListasRepositorio {
 		p = ConexionBD.conectar();
 	}
 
+	public ListasRepositorio(JDBCTemplate p) {
+		this.p=p;
+	}
+
 	public void crearLista(ListaReproduccion lista) {
 		String sql = "INSERT INTO ListaReproduccion (usuario, Titulo, Reproducciones)"
 				+ " VALUES (?, ?, ?)";

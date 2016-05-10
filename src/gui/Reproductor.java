@@ -46,7 +46,7 @@ public class Reproductor extends JFrame {
 
 	private JPanel contentPane;
 
-	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
+	private CancionRepositorio cancionRepositorio = new CancionRepositorio(Inicio.p);
 
 	private PausablePlayer player = null;
 

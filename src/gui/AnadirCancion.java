@@ -28,8 +28,8 @@ public class AnadirCancion extends JFrame{
 	
 	private JPanel contentPane;
 	private JTextField textField;
-	private ListasRepositorio listasRepositorio = new ListasRepositorio();
-	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
+	private ListasRepositorio listasRepositorio = new ListasRepositorio(Inicio.p);
+	private CancionRepositorio cancionRepositorio = new CancionRepositorio(Inicio.p);
 	JTable table;
 	int idLista;
 	Usuario u;

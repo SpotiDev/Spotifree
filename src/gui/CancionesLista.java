@@ -58,8 +58,8 @@ public class CancionesLista extends JFrame {
 	Usuario u;
 	int id;
 
-	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
-	private ListasRepositorio listasRepositorio = new ListasRepositorio();
+	private CancionRepositorio cancionRepositorio = new CancionRepositorio(Inicio.p);
+	private ListasRepositorio listasRepositorio = new ListasRepositorio(Inicio.p);
 
 	public CancionesLista(final int id, final Usuario u) {
 		this.id = id;

@@ -7,13 +7,17 @@ import modelo.Usuario;
 import modelo.UsuarioException;
 
 public class UsuarioRepositorio {
-	
-private JDBCTemplate p;
-	
+
+	private JDBCTemplate p;
+
 	public UsuarioRepositorio() {
 		p = ConexionBD.conectar();
 	}
-	
+
+	public UsuarioRepositorio(JDBCTemplate p) {
+		this.p=p;
+	}
+
 	public Usuario seleccionarUsuario(String correo) throws UsuarioException {
 		String sql = "SELECT Correo, NombreUsuario, NombrePublico, Contrasena, Telefono FROM Usuario WHERE Correo = '" + correo + "'";
 		Cursor cursor = p.executeQueryAndGetCursor(sql);

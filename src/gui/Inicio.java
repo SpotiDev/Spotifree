@@ -8,7 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
-import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -35,7 +34,6 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.SystemColor;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -47,7 +45,6 @@ import modelo.Cancion;
 import modelo.CancionException;
 import modelo.Genero;
 import modelo.GeneroException;
-import modelo.PausablePlayer;
 import modelo.Usuario;
 import modelo.UsuarioException;
 import repositorio.CancionRepositorio;
@@ -63,8 +60,6 @@ import java.io.IOException;
 
 import javax.swing.JComboBox;
 
-import javazoom.jl.decoder.JavaLayerException;
-
 /**
  * Pantalla que gestiona el acceso a la aplicacion de los distintos tipos de
  * usuario que hay en la aplicacion: cliente y administrador
@@ -73,6 +68,8 @@ import javazoom.jl.decoder.JavaLayerException;
  */
 @SuppressWarnings("serial")
 public class Inicio extends JFrame {
+	
+	public static JDBCTemplate p = ConexionBD.conectar();
 
 	private JPanel contentPane;
 	private static JFrame frame;
@@ -81,13 +78,13 @@ public class Inicio extends JFrame {
 	private JPasswordField textField_1;
 	private JTable table;
 	boolean logueado = false;
-	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio(p);
 	Usuario u;
 
 	public final static ArrayList<Integer> cacheId = new ArrayList <>();
 	public static ArrayList<Integer> listaId = new ArrayList<>();
 
-	private CancionRepositorio cancionRepositorio = new CancionRepositorio();
+	private CancionRepositorio cancionRepositorio = new CancionRepositorio(p);
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
