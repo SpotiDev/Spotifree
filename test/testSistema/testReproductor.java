@@ -10,15 +10,20 @@ import javazoom.jl.decoder.JavaLayerException;
 import modelo.Cancion;
 import modelo.CancionException;
 import modelo.PausablePlayer;
+import repositorio.CancionRepositorio;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import gui.Inicio;
+import gui.Reproductor;
+
 public class testReproductor {
 	
 	static Cancion c;
 	PausablePlayer player;
+	private CancionRepositorio cancionRepositorio;
 
 	@BeforeClass
 	public static void initCancion() throws CancionException, JavaLayerException, FileNotFoundException{
@@ -51,5 +56,4 @@ public class testReproductor {
 		player.stop();
 		assertTrue(!player.isPlaying());
 	}
-
 }

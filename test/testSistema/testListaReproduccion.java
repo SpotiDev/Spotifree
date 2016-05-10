@@ -2,18 +2,10 @@ package testSistema;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import bd.ConexionBD;
 import bd.JDBCTemplate;
-import modelo.Cancion;
 import modelo.ListaReproduccion;
 import modelo.Usuario;
 import modelo.UsuarioException;
@@ -71,8 +63,24 @@ public class testListaReproduccion {
 	
 		int idCancion = cancionRepositorio.buscarCancion("titulo");
 		int numListas = p.executeQueryCount("SELECT COUNT(*) FROM ListaReproduccion,ListaCancion WHERE ListaCancion.idLista = ListaReproduccion.id");
-		listaRepositorio.subirCancionLista(idCancion,listaRepositorio.getIdLista("listaPrueba",u));
+		listaRepositorio.subirCancionLista(idCancion,listaRepositorio.getIdLista("test",u));
 		int numListas2 = p.executeQueryCount("SELECT COUNT(*) FROM ListaReproduccion,ListaCancion WHERE ListaCancion.idLista = ListaReproduccion.id");
 		assertEquals(numListas, numListas2-1);
 	}
+	
+	
+	@Test
+	public void testAnadirBuscarCancionListaReproduccion() throws UsuarioException {
+		p = ConexionBD.conectar();
+		String pass = "123456";
+		String user = p.executeQueryBuscar("SELECT Correo FROM Usuario WHERE Usuario.Contrasena = '" + pass + "'");
+		u = usuarioRepositorio.seleccionarUsuario(user);
+	
+		int idCancion = cancionRepositorio.buscarCancion("titulo");
+		listaRepositorio.subirCancionLista(idCancion,listaRepositorio.getIdLista("test",u));
+		String nombreCancion = p.executeQueryBuscar("SELECT Nombre FROM Cancion,ListaReproduccion,ListaCancion WHERE Cancion.Nombre = 'titulo' and ListaCancion.idLista = ListaReproduccion.id");
+		assertEquals("titulo",nombreCancion);
+	}
+	
+	
 }

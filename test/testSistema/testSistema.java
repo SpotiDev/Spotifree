@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -18,15 +17,19 @@ import org.jaudiotagger.tag.TagException;
 import org.junit.Test;
 
 import bd.ConexionBD;
-import bd.Cursor;
 import bd.JDBCTemplate;
 import modelo.Cancion;
 import modelo.CancionException;
+import modelo.Usuario;
+import modelo.UsuarioException;
 import repositorio.CancionRepositorio;
+import repositorio.UsuarioRepositorio;
 
 public class testSistema {
 	
 	private JDBCTemplate p;
+	private Usuario u;
+	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 
 	/**
 	 * a�ade una cancion
@@ -136,6 +139,12 @@ public class testSistema {
 		String nombreCancion = p.executeQueryBuscar("SELECT Nombre FROM Cancion WHERE Cancion.Nombre = 'animales'");
 		assertEquals("animales",nombreCancion);
 	}
-
-
+	
+	@Test 
+	public void testCancionMasOida() throws CancionException, CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
+		p = ConexionBD.conectar();
+		
+		String nombreCancion = p.executeQueryBuscar("SELECT Nombre FROM Cancion WHERE Cancion.Reproducciones = '13'");
+		assertEquals("Samba do brasil",nombreCancion);
+	}
 }
