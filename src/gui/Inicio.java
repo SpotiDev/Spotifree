@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JPasswordField;
@@ -68,7 +69,7 @@ import javax.swing.JComboBox;
  */
 @SuppressWarnings("serial")
 public class Inicio extends JFrame {
-	
+
 	public static JDBCTemplate p = ConexionBD.conectar();
 
 	private JPanel contentPane;
@@ -161,7 +162,6 @@ public class Inicio extends JFrame {
 		btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//p.executeQuery("SELECT ID, Nombre, Artista, Genero, Duracion, Reproducciones FROM Cancion WHERE Cancion.Nombre = '"+textBusqueda.getText()+"'" + "OR Cancion.Artista = '"+textBusqueda.getText()+"'" + "OR Cancion.Genero = '"+textBusqueda.getText()+"'");
 				try {
 					ArrayList<Cancion> list = cancionRepositorio.findCanciones(textBusqueda.getText());
 					DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
@@ -249,10 +249,6 @@ public class Inicio extends JFrame {
 		panel.add(btnIniciarSesin);
 		btnIniciarSesin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JDBCTemplate p = ConexionBD.conectar();
-				//	p.executeQuery("SELECT * FROM Usuario WHERE Usuario.NombreUsuario = '"+textField.getText()+"'"
-				//			+ " AND Usuario.Contrasena = '"+textField_1.getText()+"'");
-				//	ConexionBD.desconectar(p);
 				String pass = new String(textField_1.getPassword());
 				String comprobarPW = p.executeQueryBuscar("SELECT Correo FROM Usuario WHERE Usuario.Contrasena = '" + pass + "'");
 				if (textField.getText().equals(comprobarPW)) {
@@ -474,6 +470,12 @@ public class Inicio extends JFrame {
 			panel.add(btnPlay);
 
 			cargarUltimasCanciones();
+
+			addWindowListener(new WindowAdapter() {
+				public void windowClosing(WindowEvent e) {
+					ConexionBD.desconectar(p);
+				}
+			});
 	}
 
 	public void cargarGenerosMasReproducidos() {
@@ -491,7 +493,7 @@ public class Inicio extends JFrame {
 			table.repaint();
 		} catch(GeneroException e) { }
 	}
-	
+
 	public void cargarRecomendaciones() {
 		try {
 			ArrayList<Cancion> list = cancionRepositorio.findRecomendaciones(u.getCorreo());
@@ -510,7 +512,7 @@ public class Inicio extends JFrame {
 			table.repaint();
 		} catch(CancionException e) { }
 	}
-	
+
 	public void cargarUltimasCanciones() {
 		try {
 			ArrayList<Cancion> list = cancionRepositorio.findLastest();

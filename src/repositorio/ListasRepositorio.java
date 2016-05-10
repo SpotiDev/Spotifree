@@ -23,15 +23,17 @@ public class ListasRepositorio {
 	}
 
 	public void crearLista(ListaReproduccion lista) {
-		String sql = "INSERT INTO ListaReproduccion (usuario, Titulo, Reproducciones)"
-				+ " VALUES (?, ?, ?)";
-		p.executeSentence(sql, lista.getUsuario(), lista.getTitulo(), lista.getReproducciones());
+		if (!lista.getTitulo().equals("")) {
+			String sql = "INSERT INTO ListaReproduccion (usuario, Titulo, Reproducciones)"
+					+ " VALUES (?, ?, ?)";
+			p.executeSentence(sql, lista.getUsuario(), lista.getTitulo(), lista.getReproducciones());
+		}
 	}
 
 	public void subirCancionLista(int idCancion, int idLista) {
-		String sql = "INSERT INTO ListaCancion (cancion, idLista)"
-				+ " VALUES (?, ?)";
 		if (idCancion>-1) {
+			String sql = "INSERT INTO ListaCancion (cancion, idLista)"
+					+ " VALUES (?, ?)";
 			p.executeSentence(sql, idCancion, idLista);	
 		}
 	}

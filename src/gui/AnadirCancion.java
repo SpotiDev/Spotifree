@@ -18,6 +18,7 @@ import repositorio.ListasRepositorio;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -101,6 +102,7 @@ public class AnadirCancion extends JFrame{
 			}
 			table.setModel(tableModel);
 			table.repaint();
+			this.processWindowEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		} catch (CancionException e) {
 			System.out.println("Error al cargar canciones de la lista");
 		}

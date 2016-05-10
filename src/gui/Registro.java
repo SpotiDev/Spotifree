@@ -8,9 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
-import bd.ConexionBD;
-import bd.JDBCTemplate;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -19,18 +16,18 @@ import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class Registro extends JFrame{
-	
+
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
-	
+
 	public Registro() {
-		
+
 		setTitle("Spotifree");
-		
+
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 360, 261);
@@ -45,8 +42,8 @@ public class Registro extends JFrame{
 		panel.setLayout(null);
 		panel.setLayout(null);
 		panel.setLayout(null);
-		
-		
+
+
 		JTextPane txtNombreArtistico = new JTextPane();
 		txtNombreArtistico.setForeground(Color.BLACK);
 		txtNombreArtistico.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -55,7 +52,7 @@ public class Registro extends JFrame{
 		txtNombreArtistico.setText("Nombre artistico: ");
 		txtNombreArtistico.setOpaque(false);
 		panel.add(txtNombreArtistico);
-		
+
 		JTextPane txtNombreUsuario = new JTextPane();
 		txtNombreUsuario.setForeground(Color.BLACK);
 		txtNombreUsuario.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -63,7 +60,7 @@ public class Registro extends JFrame{
 		txtNombreUsuario.setText("Nombre usuario: ");
 		txtNombreUsuario.setOpaque(false);
 		panel.add(txtNombreUsuario);
-		
+
 		JTextPane txtCorreo = new JTextPane();
 		txtCorreo.setForeground(Color.BLACK);
 		txtCorreo.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -72,7 +69,7 @@ public class Registro extends JFrame{
 		txtCorreo.setText("Correo: ");
 		txtCorreo.setOpaque(false);
 		panel.add(txtCorreo);
-		
+
 		JTextPane txtcontrasegna = new JTextPane();
 		txtcontrasegna.setForeground(Color.BLACK);
 		txtcontrasegna.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -81,45 +78,45 @@ public class Registro extends JFrame{
 		txtcontrasegna.setText("Password:");
 		txtcontrasegna.setOpaque(false);
 		panel.add(txtcontrasegna);
-		
+
 		textField = new JTextField();
 		textField.setBounds(129, 19, 188, 20);
 		panel.add(textField);
 		textField.setColumns(10);
-		
+
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
 		textField_1.setBounds(129, 50, 188, 20);
 		panel.add(textField_1);
-		
+
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
 		textField_2.setBounds(129, 81, 188, 20);
 		panel.add(textField_2);
-		
+
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
 		textField_3.setBounds(129, 112, 188, 20);
 		panel.add(textField_3);
-		
+
 		JButton btnTerminar = new JButton("Registrarse");
 		btnTerminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JDBCTemplate p = ConexionBD.conectar();
-				p.executeSentence("INSERT INTO Usuario (NombreUsuario,NombrePublico,Correo,Contrasena,Telefono) VALUES "
-						+ "(?,?,?,?,?)",textField.getText(),textField_1.getText(),textField_2.getText(),
-						textField_3.getText(),textField_4.getText());
-				ConexionBD.desconectar(p);
+				if (!textField.getText().equals("") && !textField_2.getText().equals("") && !textField_3.getText().equals("") && !textField_4.getText().equals("")) {
+					Inicio.p.executeSentence("INSERT INTO Usuario (NombreUsuario,NombrePublico,Correo,Contrasena,Telefono) VALUES "
+							+ "(?,?,?,?,?)",textField.getText(),textField_1.getText(),textField_2.getText(),
+							textField_3.getText(),textField_4.getText());
+				}
 			}
 		});
 		btnTerminar.setBounds(195, 175, 122, 23);
 		panel.add(btnTerminar);
-		
+
 		textField_4 = new JTextField();
 		textField_4.setBounds(129, 143, 188, 20);
 		panel.add(textField_4);
 		textField_4.setColumns(10);
-		
+
 		JTextPane txtpnTelefono = new JTextPane();
 		txtpnTelefono.setForeground(Color.BLACK);
 		txtpnTelefono.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -128,9 +125,8 @@ public class Registro extends JFrame{
 		txtpnTelefono.setOpaque(false);
 		txtpnTelefono.setBounds(19, 143, 107, 20);
 		panel.add(txtpnTelefono);
-		
+
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		
 	}
 }

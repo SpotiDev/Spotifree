@@ -26,10 +26,12 @@ public class CancionRepositorio {
 	}
 
 	public void subirCancion(Cancion cancion) {
-		String sql = "INSERT INTO Cancion (nombre, artista, genero, reproducciones, duracion, archivo)"
-				+ " VALUES (?, ?, ?, ?, ?, ?)";
-		p.executeSentence(sql, cancion.getNombre(), cancion.getArtista(), cancion.getGenero(),
-				cancion.getReproducciones(), cancion.getDuracion(), cancion.getArchivo());
+		if (!cancion.getNombre().equals("")) {
+			String sql = "INSERT INTO Cancion (nombre, artista, genero, reproducciones, duracion, archivo)"
+					+ " VALUES (?, ?, ?, ?, ?, ?)";
+			p.executeSentence(sql, cancion.getNombre(), cancion.getArtista(), cancion.getGenero(),
+					cancion.getReproducciones(), cancion.getDuracion(), cancion.getArchivo());
+		}
 	}
 
 	public Cancion seleccionarCancion(int id, boolean cache) throws CancionException {
