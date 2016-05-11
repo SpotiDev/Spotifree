@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
@@ -32,7 +33,7 @@ public class SettingsDialog extends JDialog {
 	private JTextField textHost = new JTextField(20);
 	private JTextField textPort = new JTextField(20);
 	private JTextField textUser = new JTextField(20);
-	private JTextField textPass = new JTextField(20);
+	private JPasswordField textPass = new JPasswordField(20);
 	
 	private JButton buttonSave = new JButton("Save");
 	

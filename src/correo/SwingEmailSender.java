@@ -17,11 +17,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 public class SwingEmailSender extends JFrame {
 	private ConfigUtility configUtil = new ConfigUtility();
@@ -31,9 +30,11 @@ public class SwingEmailSender extends JFrame {
 	private JMenuItem menuItemSetting = new JMenuItem("Propiedades...");
 	
 	private JLabel labelTo = new JLabel("Destino: ");
+	private JLabel labelPass = new JLabel("Contraseña correo: ");
 	private JLabel labelSubject = new JLabel("Asunto: ");
 	
 	private JTextField fieldTo = new JTextField(30);
+	private JPasswordField fieldPass = new JPasswordField(30);
 	private JTextField fieldSubject = new JTextField(30);
 	
 	private JButton buttonSend = new JButton("ENVIAR");
@@ -73,20 +74,6 @@ public class SwingEmailSender extends JFrame {
 		pack();
 		setLocationRelativeTo(null);	// center on screen
 		
-	/*	// set look and feel to system dependent
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new SwingEmailSender(correo, mensaje).setVisible(true);
-			}
-		});*/
-		
 	}
 
 	private void setupMenu() {
@@ -114,6 +101,14 @@ public class SwingEmailSender extends JFrame {
 		
 		constraints.gridx = 0;
 		constraints.gridy = 1;
+		add(labelPass, constraints);
+		
+		constraints.gridx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		add(fieldPass, constraints);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 2;
 		add(labelSubject, constraints);
 		
 		constraints.gridx = 1;
@@ -135,13 +130,13 @@ public class SwingEmailSender extends JFrame {
 		});
 		
 		constraints.gridx = 0;
-		constraints.gridy = 2;
+		constraints.gridy = 3;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 3;
 		filePicker.setMode(JFilePicker.MODE_OPEN);
 		add(filePicker, constraints);
 		
-		constraints.gridy = 3;
+		constraints.gridy = 5;
 		constraints.weightx = 1.0;
 		constraints.weighty = 1.0;
 		
@@ -166,7 +161,7 @@ public class SwingEmailSender extends JFrame {
 		
 		try {
 			Properties smtpProperties = configUtil.loadProperties();
-			EmailUtility.sendEmail(smtpProperties, toAddress, subject, message, attachFiles);
+			EmailUtility.sendEmail(smtpProperties, toAddress, subject, message, attachFiles, fieldPass.getText());
 			
 			JOptionPane.showMessageDialog(this, 
 					"El mensaje ha sido enviado");
