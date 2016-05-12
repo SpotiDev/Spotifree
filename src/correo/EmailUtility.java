@@ -25,10 +25,11 @@ import javax.mail.internet.MimeMultipart;
  */
 public class EmailUtility {
 	public static void sendEmail(Properties smtpProperties, String toAddress,
-			String subject, String message, File[] attachFiles, String password)
+			String subject, String message, File[] attachFiles)
 			throws AddressException, MessagingException, IOException {
 
 		final String userName = smtpProperties.getProperty("mail.user");
+		final String password = smtpProperties.getProperty("mail.password");
 		
 		// creates a new session with an authenticator
 		Authenticator auth = new Authenticator() {

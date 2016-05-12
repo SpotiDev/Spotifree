@@ -229,30 +229,26 @@ public class Reproductor extends JFrame {
 		txtpnGenero.setBounds(19, 103, 64, 20);
 		panel.add(txtpnGenero);
 
-		JButton button_1 = new JButton("Recomendar a un amigo");
-		button_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SwingEmailSender correo;
-				Cancion cancion;
-				String mensaje = "";
-				try {
-					cancion = cancionRepositorio.seleccionarCancion(id,false);
-					mensaje = "Hola, prueba esta canción que acabo de escuchar y te gustará: \n"
-							+ ""+cancion.getNombre()+" del Artista "+cancion.getArtista();
-				} catch (CancionException e1) {
-					e1.printStackTrace();
+		if (u!=null) {
+			JButton button_1 = new JButton("Recomendar a un amigo");
+			button_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Cancion cancion;
+					String mensaje = "";
+					try {
+						cancion = cancionRepositorio.seleccionarCancion(id,false);
+						mensaje = "Hola, soy "+u.getCorreo()+", prueba esta canción que acabo de escuchar y te gustará: \n"
+								+ ""+cancion.getNombre()+" del Artista "+cancion.getArtista();
+					} catch (CancionException e1) {
+						e1.printStackTrace();
+					}
+					SwingEmailSender correo = new SwingEmailSender(mensaje);
+					correo.setVisible(true);
 				}
-				if (u!=null) {
-					correo = new SwingEmailSender(u.getCorreo(),"rellenar",mensaje);	
-				}
-				else {
-					correo = new SwingEmailSender("","",mensaje);
-				}
-				correo.setVisible(true);
-			}
-		});
-		button_1.setBounds(109, 241, 277, 39);
-		panel.add(button_1);
+			});
+			button_1.setBounds(109, 241, 277, 39);
+			panel.add(button_1);
+		}
 
 		JTextPane txtpnAsd = new JTextPane();
 		txtpnAsd.setText(c.getNombre());

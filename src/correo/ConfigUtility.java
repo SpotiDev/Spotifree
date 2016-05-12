@@ -14,7 +14,7 @@ import java.util.Properties;
  *
  */
 public class ConfigUtility {
-	private File configFile = new File("hotmail.properties"); 
+	private File configFile = new File("smtp.properties"); 
 	private Properties configProps;
 	
 	public Properties loadProperties() throws IOException {

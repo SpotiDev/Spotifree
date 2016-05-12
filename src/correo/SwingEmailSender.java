@@ -13,11 +13,11 @@ import java.util.Properties;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
+/*import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPasswordField;*/
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -25,16 +25,16 @@ import javax.swing.JTextField;
 public class SwingEmailSender extends JFrame {
 	private ConfigUtility configUtil = new ConfigUtility();
 	
-	private JMenuBar menuBar = new JMenuBar();
+	/*private JMenuBar menuBar = new JMenuBar();
 	private JMenu menuFile = new JMenu("Propiedades");
-	private JMenuItem menuItemSetting = new JMenuItem("Propiedades...");
+	private JMenuItem menuItemSetting = new JMenuItem("Propiedades...");*/
 	
 	private JLabel labelTo = new JLabel("Destino: ");
-	private JLabel labelPass = new JLabel("Contraseña correo: ");
+	//private JLabel labelPass = new JLabel("Contraseña correo: ");
 	private JLabel labelSubject = new JLabel("Asunto: ");
 	
 	private JTextField fieldTo = new JTextField(30);
-	private JPasswordField fieldPass = new JPasswordField(30);
+	//private JPasswordField fieldPass = new JPasswordField(30);
 	private JTextField fieldSubject = new JTextField(30);
 	
 	private JButton buttonSend = new JButton("ENVIAR");
@@ -45,18 +45,14 @@ public class SwingEmailSender extends JFrame {
 	
 	private GridBagConstraints constraints = new GridBagConstraints();
 	
-	public SwingEmailSender(String correo, String contrasena, String mensaje) {
+	public SwingEmailSender(String mensaje) {
 		super("Recomendar Canción");
-		try {
-			configUtil.loadProperties().setProperty("mail.user", correo);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		try {
 			String port = configUtil.loadProperties().getProperty("mail.smtp.port");
 			String host = configUtil.loadProperties().getProperty("mail.smtp.host");
-			configUtil.saveProperties(host, port, correo, contrasena);
+			String correo = configUtil.loadProperties().getProperty("mail.user");
+			String pass = configUtil.loadProperties().getProperty("mail.password");
+			configUtil.saveProperties(host, port, correo, pass);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -68,7 +64,7 @@ public class SwingEmailSender extends JFrame {
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.insets = new Insets(5, 5, 5, 5);
 	
-		setupMenu();
+		//setupMenu();
 		setupForm();
 		
 		pack();
@@ -76,7 +72,7 @@ public class SwingEmailSender extends JFrame {
 		
 	}
 
-	private void setupMenu() {
+	/*private void setupMenu() {
 		menuItemSetting.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -88,7 +84,7 @@ public class SwingEmailSender extends JFrame {
 		menuFile.add(menuItemSetting);
 		menuBar.add(menuFile);
 		setJMenuBar(menuBar);		
-	}
+	}*/
 	
 	private void setupForm() {
 		constraints.gridx = 0;
@@ -99,16 +95,16 @@ public class SwingEmailSender extends JFrame {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		add(fieldTo, constraints);
 		
-		constraints.gridx = 0;
+		/*constraints.gridx = 0;
 		constraints.gridy = 1;
 		add(labelPass, constraints);
 		
 		constraints.gridx = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		add(fieldPass, constraints);
+		add(fieldPass, constraints);*/
 		
 		constraints.gridx = 0;
-		constraints.gridy = 2;
+		constraints.gridy = 1;
 		add(labelSubject, constraints);
 		
 		constraints.gridx = 1;
@@ -130,7 +126,7 @@ public class SwingEmailSender extends JFrame {
 		});
 		
 		constraints.gridx = 0;
-		constraints.gridy = 3;
+		constraints.gridy = 2;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 3;
 		filePicker.setMode(JFilePicker.MODE_OPEN);
@@ -161,7 +157,7 @@ public class SwingEmailSender extends JFrame {
 		
 		try {
 			Properties smtpProperties = configUtil.loadProperties();
-			EmailUtility.sendEmail(smtpProperties, toAddress, subject, message, attachFiles, fieldPass.getText());
+			EmailUtility.sendEmail(smtpProperties, toAddress, subject, message, attachFiles);
 			
 			JOptionPane.showMessageDialog(this, 
 					"El mensaje ha sido enviado");
